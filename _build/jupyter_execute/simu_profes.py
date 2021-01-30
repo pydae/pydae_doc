@@ -381,49 +381,49 @@ ax.set_xlabel('Time (s)')
 fig2.align_ylabels()
 
 
-# In[48]:
+# In[12]:
 
 
 pr.report_x()
 
 
-# In[60]:
+# In[13]:
 
 
 pr.get_value('v_f_GRI')
 
 
-# In[45]:
+# In[14]:
 
 
 S_GR**2 - (p_poi/4)**2
 
 
-# In[46]:
+# In[15]:
 
 
 p_poi/1e6
 
 
-# In[37]:
+# In[16]:
 
 
 43750000000000.0/1e6
 
 
-# In[38]:
+# In[17]:
 
 
 S_GR
 
 
-# In[39]:
+# In[18]:
 
 
 P_GR
 
 
-# In[41]:
+# In[19]:
 
 
 np.sqrt(S_GR**2 - P_GR**2)
@@ -435,7 +435,7 @@ np.sqrt(S_GR**2 - P_GR**2)
 
 
 
-# In[21]:
+# In[20]:
 
 
 P_GR = 5e6
@@ -443,14 +443,14 @@ P_nom = 4*P_GR # potencia nominal de nuestro parque
 print(f'P_nom = {P_nom/1e6} MW')
 
 
-# In[12]:
+# In[21]:
 
 
 E_alcolea  = 3_300_000e3 # Wh
 P_nom_alcolea =  2_160e3 # W
 
 
-# In[23]:
+# In[22]:
 
 
 E_planta = P_nom/P_nom_alcolea*E_alcolea
@@ -459,7 +459,7 @@ print(f'E_planta_MWh = {E_planta_MWh:0.0f} MWh')
 E_planta_MWh
 
 
-# In[25]:
+# In[23]:
 
 
 euro_MWh = 53.41
@@ -467,7 +467,7 @@ euro_año = E_planta_MWh*euro_MWh
 print(f'euro_año = {euro_año/1e6:0.1f} M€')
 
 
-# In[31]:
+# In[24]:
 
 
 euros_sin_bateria = 0.1*euro_año 
@@ -476,7 +476,7 @@ print(f'euros sin bateria = {euros_sin_bateria/1e3:0.2f} k€')
 print(f'total euros sin bateria = {20*euros_sin_bateria/1e6:0.2f} M€')
 
 
-# In[40]:
+# In[25]:
 
 
 p_bateria = 0.1*P_nom
@@ -490,7 +490,7 @@ print(f'costo batería = {costo_batería/1e3:0.2f} k€')
 print(f'costo total con batería sin curtailment = {2*costo_batería/1e6:0.2f} M€')
 
 
-# In[42]:
+# In[26]:
 
 
 p_bateria = 0.1*P_nom
@@ -504,7 +504,7 @@ print(f'costo batería = {costo_batería/1e3:0.2f} k€')
 print(f'costo total con batería con curtailment = {2*costo_batería/1e6:0.2f} M€')
 
 
-# In[20]:
+# In[27]:
 
 
 costo_curt = 0.1*euro_año

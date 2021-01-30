@@ -3,4 +3,5 @@
 #
 - file: intro
   sections:
-    - file: pendulum/pendulum_builder
+    - file: dae/dae
+    - file: pendulum/pendulum_doc
