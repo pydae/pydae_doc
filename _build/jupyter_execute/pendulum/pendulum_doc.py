@@ -241,3 +241,101 @@ HTML(f'''<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"
   </circle>
 </svg>''')
 
+
+# In[8]:
+
+
+HTML('''
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 104.56544 58.339157"
+   height="58.339157mm"
+   width="104.56544mm">
+  <defs
+     id="defs2" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     transform="translate(-19.155907,-101.33694)">
+    <path
+       style="fill:none;stroke:#555555;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000"
+       id="path833"
+       d="m 123.47135,103.1875 a 52.033852,52.033405 0 0 1 -26.016925,45.06225 52.033852,52.033405 0 0 1 -52.033852,0 52.033852,52.033405 0 0 1 -26.016925,-45.06225" />
+    <g transform="rotate(0,71.4375,103.18749)">
+       id="g890">
+      <rect
+         style="fill:#337ab7;stroke:none;stroke-width:0.499999;stroke-miterlimit:4;stroke-dasharray:0.999999, 0.999999;stroke-dashoffset:0;stop-color:#000000"
+         id="rect885"
+         width="1.5874945"
+         height="50.270844"
+         x="70.643753"
+         y="101.86458" />
+      <circle
+         style="fill:#d9534f;stroke:#d9534f;stroke-width:0.132292;stop-color:#000000"
+         id="path868"
+         cx="71.4375"
+         cy="155.25372"
+         r="4.3562231" />
+      <circle
+         style="fill:#337ab7;stroke:none;stroke-width:0.132292;stop-color:#000000"
+         id="path868-1"
+         cx="71.4375"
+         cy="103.18751"
+         r="1.8505714" />
+    <animateTransform attributeType="xml" attributeName="transform" type="rotate"
+    values="0 71.4375,103.18749; 
+           10 71.4375,103.18749;
+            0 71.4375,103.18749" 
+        keyTimes="0 ;  0.1 ; 1" 
+        dur="1s" repeatCount="indefinite" />
+    </g>
+  </g>
+</svg>
+''')
+
+
+# In[9]:
+
+
+HTML('''
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"> 
+<svg width="576" height="576" viewBox="0 0 288 288" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<g id="seed" transform="translate(144,144)" stroke-width="2" stroke="black" fill="none" >
+<circle cx="0" r="64" />
+<circle cx="64" r="64" />
+<circle cx="64" r="64" transform="rotate(60)" />
+<circle cx="64" r="64" transform="rotate(120)" />
+<circle cx="64" r="64" transform="rotate(180)" />
+<circle cx="64" r="64" transform="rotate(240)" />
+<circle cx="64" r="64" transform="rotate(300)" />
+<circle cx="0" r="128" />
+<animateTransform attributeType="xml" attributeName="transform" type="rotate" values="0 0 0; 360 0 0" dur="5s" repeatCount="indefinite" />
+</g>
+</svg>
+''')
+
+
+# In[ ]:
+
+
+
+

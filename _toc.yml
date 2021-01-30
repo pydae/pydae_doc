@@ -5,3 +5,4 @@
   sections:
     - file: dae/dae
     - file: pendulum/pendulum_doc
+    - file: pendulum/pendulum_sim
