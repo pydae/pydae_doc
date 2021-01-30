@@ -1,0 +1,133 @@
+Traceback (most recent call last):
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\jupyter_cache\executors\utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\client.py", line 1087, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\util.py", line 74, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\util.py", line 53, in just_run
+    return loop.run_until_complete(coro)
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\asyncio\base_events.py", line 587, in run_until_complete
+    return future.result()
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\client.py", line 541, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\client.py", line 832, in async_execute_cell
+    self._check_raise_for_error(cell, exec_reply)
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\client.py", line 740, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply['content'])
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Inicialización del sistema
+# ==========================
+
+P_GR = 5e6
+Q_GR = 0e6
+
+pr.initialize([{'P_GR1': P_GR, 'Q_GR1': Q_GR,
+                'P_GR2': P_GR, 'Q_GR2': Q_GR,
+                'P_GR3': P_GR, 'Q_GR3': Q_GR,
+                'P_GR4': P_GR, 'Q_GR4': Q_GR,
+                'P_PMV': 0.0, 'Q_PMV': 0.0}], 1) 
+
+K_g = 1/250e6 # gain of the plant
+
+T_s = 0.1
+times = np.arange(0,10,T_s)
+N_t = len(times)
+N_x = 2
+
+# diseño del controlador
+K_p = -20.0e6
+K_i = 1/(T_s*K_g)
+
+# condiciones iniciales
+x = 0.0
+xi = 0.0
+Q_POI_ref = 0.0
+V_POI_ref = pr.get_value('V_POI')
+Q_STATCOM_max = 10.0e6
+# vector para guardar estados, etc.
+out = np.zeros((N_t,5))
+it = 0
+Q_STATCOM_ref = 0
+Q_GR_ref = 0
+# Bucle de simulación
+# ===================
+
+for t in times:
+    out[it,0] = xi
+    out[it,1] = Q_POI_ref
+    out[it,2] = Q_STATCOM_ref
+    
+    if t>1.0:
+        V_POI_ref = 1.05
+        
+    # Plant
+    Q_GR1_sat = Q_GR1_ref 
+    Q_GR1_max = np.sqrt(S_GR1**2 - P_GR1**2)
+    if Q_GR1_sat > Q_GR1_max: Q_GR1_sat  = Q_GR1_max
+
+    pr.run([{'t_end':t,
+             'Q_PMV':Q_STATCOM_ref,
+             'Q_GR1':Q_GR1_sat,
+             'Q_GR2':Q_GR2_ref,
+             'Q_GR3':Q_GR3_ref,
+             'Q_GR4':Q_GR4_ref }])
+    V_POI = pr.get_value('V_POI')
+    
+    # Controller
+    error = V_POI_ref - V_POI
+    xi = xi + T_s*error
+    Q_POI_ref = K_p*error + K_i*xi
+    Q_STATCOM_ref = Q_POI_ref
+    if Q_STATCOM_ref >  Q_STATCOM_max: Q_STATCOM_ref =  Q_STATCOM_max
+    if Q_STATCOM_ref < -Q_STATCOM_max: Q_STATCOM_ref = -Q_STATCOM_max
+    Q_GR_ref = Q_POI_ref - Q_STATCOM_ref
+    Q_GR1_ref = 0.3*Q_GR_ref
+    Q_GR2_ref = 0.2*Q_GR_ref
+    Q_GR3_ref = 0.3*Q_GR_ref
+    Q_GR4_ref = 0.2*Q_GR_ref
+
+    it += 1 
+
+# Post-procesado
+# ==============
+pr.post()
+
+fig1, axes = plt.subplots(nrows=2, ncols=1, figsize=(6, 6),sharex=True)
+
+axes[0].step(times,out[:,1]/1e6,label='$Q_{POI}^\star$')
+axes[0].step(times,out[:,2]/1e6,label='$Q_{STATCOM}^\star$')
+axes[0].step(pr.T,pr.get_values('Q_GR1')/1e6,label='$Q_{GR1}^\star$')
+axes[0].step(pr.T,pr.get_values('Q_GR2')/1e6,label='$Q_{GR2}^\star$')
+axes[0].step(pr.T,pr.get_values('Q_GR3')/1e6,label='$Q_{GR3}^\star$')
+axes[0].step(pr.T,pr.get_values('Q_GR4')/1e6,label='$Q_{GR4}^\star$')
+axes[0].step(times,out[:,1]/1e6,label='$Q_{PMV}^\star$')
+
+axes[1].plot(pr.T,pr.get_values('V_POI'),label='$V_{POI}$')
+
+axes[0].set_ylabel('Reactive Power (Mvar)')
+#axes[0].set_ylim([-5,35])
+
+axes[1].set_ylabel('Voltage (p.u.)')
+for ax in axes:
+    ax.grid()
+    ax.legend(loc='best',ncol=3)
+    ax.set_xlim([0,10])
+
+ax.set_xlabel('Time (s)')
+fig1.align_ylabels()
+------------------
+
+[1;31m---------------------------------------------------------------------------[0m
+[1;31mNameError[0m                                 Traceback (most recent call last)
+[1;32m<ipython-input-13-4a9f5ded6178>[0m in [0;36m<module>[1;34m[0m
+[0;32m     45[0m [1;33m[0m[0m
+[0;32m     46[0m     [1;31m# Plant[0m[1;33m[0m[1;33m[0m[1;33m[0m[0m
+[1;32m---> 47[1;33m     [0mQ_GR1_sat[0m [1;33m=[0m [0mQ_GR1_ref[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m     48[0m     [0mQ_GR1_max[0m [1;33m=[0m [0mnp[0m[1;33m.[0m[0msqrt[0m[1;33m([0m[0mS_GR1[0m[1;33m**[0m[1;36m2[0m [1;33m-[0m [0mP_GR1[0m[1;33m**[0m[1;36m2[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0;32m     49[0m     [1;32mif[0m [0mQ_GR1_sat[0m [1;33m>[0m [0mQ_GR1_max[0m[1;33m:[0m [0mQ_GR1_sat[0m  [1;33m=[0m [0mQ_GR1_max[0m[1;33m[0m[1;33m[0m[0m
+
+[1;31mNameError[0m: name 'Q_GR1_ref' is not defined
+NameError: name 'Q_GR1_ref' is not defined
+
