@@ -1,19 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# # Pendulum DAE system
+
 # In[1]:
-
-
-## Pendulum DAE system
-
-
-# In[2]:
 
 
 from IPython.lib.display import YouTubeVideo
 YouTubeVideo('4a0FbQdH3dY')
 
 
+# ## Formulation
 # 
 # Backward solution:
 # 
@@ -139,7 +136,11 @@ YouTubeVideo('4a0FbQdH3dY')
 # \right]
 # $$
 
-# In[3]:
+# 9.45 he sets the bom in 5deg (How much force in x did he applied?)
+# 
+# 
+
+# In[2]:
 
 
 import numpy as np
@@ -149,7 +150,7 @@ import pydae.build as db
 
 # ### Definition of variables and constants
 
-# In[4]:
+# In[3]:
 
 
 params_dict = {'L':5.21,'G':9.81,'M':10.0,'K_d':1e-3}
@@ -173,7 +174,7 @@ exec(db.sym_gen_str())  # exec to generate the required symbolic varables and co
 
 # ### System formulation
 
-# In[5]:
+# In[4]:
 
 
 dp_x = v_x
@@ -187,7 +188,7 @@ g_2 = -theta + sym.atan2(p_x,-p_y)
 
 # ## Build the model
 
-# In[6]:
+# In[5]:
 
 
 sys = {'name':'pendulum',
@@ -205,8 +206,38 @@ sys = db.system(sys)
 db.sys2num(sys)
 
 
-# In[ ]:
+# In[6]:
 
 
+from IPython.core.display import HTML
 
+
+# In[7]:
+
+
+times = np.linspace(0,1,1000)
+pos = np.sin(times)
+keyTimes = ""
+keyPoints = ""
+for t in times:
+    keyTimes  += f'{t:0.4f};'
+    keyPoints += f'{(np.sin(30*t)*0.1+0.5):0.4f};' 
+keyTimes  = keyTimes[:-1].replace("'",'"')    
+keyPoints = keyPoints[:-1].replace("'",'"') 
+
+#keyPoints = "0;0.2;0.4;0.6;0.8;1.0"
+#keyTimes  = "0;0.3;0.5;0.6;0.8;1.0"
+
+HTML(f'''<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="m 110.36905,102.05357 a 39.309525,39.309525 0 0 1 -19.654764,34.04305 39.309525,39.309525 0 0 1 -39.309525,0 A 39.309525,39.309525 0 0 1 31.75,102.05357"
+      stroke="lightgrey" stroke-width="2" fill="none" id="motionPath"/>
+  <circle r="5" fill="red">
+    <animateMotion dur="30s" repeatCount="indefinite"
+        keyPoints={keyPoints} 
+        keyTimes= {keyTimes} calcMode="linear">
+      <mpath xlink:href="#motionPath"/>
+    </animateMotion>
+  </circle>
+</svg>''')
 
