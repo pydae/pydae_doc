@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    id="svg8"
    version="1.1"
-   viewBox="0 0 104.56544 58.339157"
-   height="58.339157mm"
-   width="104.56544mm">
+   viewBox="0 0 34.504853 29.236458"
+   height="29.236458mm"
+   width="34.504852mm">
   <defs
      id="defs2" />
   <metadata
@@ -26,33 +26,65 @@
   </metadata>
   <g
      id="layer1"
-     transform="translate(-19.155907,-101.33694)">
+     transform="translate(-54.19671,-130.9026)">
+    <rect
+       style="fill:none;stroke:#999999;stroke-width:0.132292;stop-color:#000000"
+       id="rect923"
+       width="34.372559"
+       height="29.104166"
+       x="54.262856"
+       y="130.96875" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.437498,103.1875 4.957897,56.66896"
+       id="path846-1" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 9.87805,56.0212"
+       id="path846-1-9" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 -4.957892,56.66896"
+       id="path846-1-9-6" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.437498,103.1875 -9.878052,56.02121"
+       id="path846-1-9-6-9" />
     <path
        style="fill:none;stroke:#555555;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000"
        id="path833"
        d="m 123.47135,103.1875 a 52.033852,52.033405 0 0 1 -26.016925,45.06225 52.033852,52.033405 0 0 1 -52.033852,0 52.033852,52.033405 0 0 1 -26.016925,-45.06225" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 5e-6,56.88542"
+       id="path846" />
     <g
        id="g890"
-       transform="rotate(-49.178229,71.4375,103.18749)">
+       transform="rotate(-0.0128064,71.440161,103.18771)">
       <rect
-         style="fill:#337ab7;stroke:none;stroke-width:0.499999;stroke-miterlimit:4;stroke-dasharray:0.999999, 0.999999;stroke-dashoffset:0;stop-color:#000000"
+         style="fill:#337ab7;stroke:none;stroke-width:0.499999;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000"
          id="rect885"
-         width="1.5874945"
-         height="50.270844"
-         x="70.643753"
-         y="101.86458" />
+         width="0.39323467"
+         height="52.916477"
+         x="71.262543"
+         y="101.9165"
+         transform="matrix(0.99999974,-7.2630252e-4,-1.7091586e-4,0.99999999,0,0)" />
       <circle
          style="fill:#d9534f;stroke:#d9534f;stroke-width:0.132292;stop-color:#000000"
          id="path868"
          cx="71.4375"
          cy="155.25372"
-         r="4.3562231" />
+         r="1.3838332" />
       <circle
          style="fill:#337ab7;stroke:none;stroke-width:0.132292;stop-color:#000000"
          id="path868-1"
          cx="71.4375"
          cy="103.18751"
-         r="1.8505714" />
+         r="1.5198423" />
+      <path
+         style="fill:#d9534f;stroke:#d9534f;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 71.425846,155.31042 -4.73e-4,2.11667"
+         id="path925" />
     </g>
   </g>
 </svg>
