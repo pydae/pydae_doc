@@ -23,7 +23,7 @@ class pendulum_class:
         self.imax = 100 
         self.N_x = 4
         self.N_y = 2 
-        self.N_z = 3 
+        self.N_z = 4 
         self.N_store = 10000 
         self.params_list = ['L', 'G', 'M', 'K_d'] 
         self.params_values_list  = [5.21, 9.81, 10.0, 0.001] 
@@ -31,7 +31,7 @@ class pendulum_class:
         self.inputs_ini_values_list  = [0.08726646259971647] 
         self.inputs_run_list = ['f_x'] 
         self.inputs_run_values_list = [0] 
-        self.outputs_list = ['E_p', 'E_k', 'theta'] 
+        self.outputs_list = ['E_p', 'E_k', 'theta', 'f_x'] 
         self.x_list = ['p_x', 'p_y', 'v_x', 'v_y'] 
         self.y_run_list = ['lam', 'theta'] 
         self.xy_list = self.x_list + self.y_run_list 
@@ -642,9 +642,10 @@ def ini(struct,mode):
     # Outputs:
     if mode == 3:
 
-        struct[0].h[0,0] = G*M*p_y
+        struct[0].h[0,0] = G*M*(L + p_y)
         struct[0].h[1,0] = 0.5*M*(v_x**2 + v_y**2)
         struct[0].h[2,0] = theta
+        struct[0].h[3,0] = f_x
     
 
     if mode == 10:
@@ -711,9 +712,10 @@ def run(t,struct,mode):
     # Outputs:
     if mode == 3:
 
-        struct[0].h[0,0] = G*M*p_y
+        struct[0].h[0,0] = G*M*(L + p_y)
         struct[0].h[1,0] = 0.5*M*(v_x**2 + v_y**2)
         struct[0].h[2,0] = theta
+        struct[0].h[3,0] = f_x
     
 
     if mode == 10:
@@ -787,9 +789,10 @@ def ini_nn(struct,mode):
     # Outputs:
     if mode == 3:
 
-        struct[0].h[0,0] = G*M*p_y
+        struct[0].h[0,0] = G*M*(L + p_y)
         struct[0].h[1,0] = 0.5*M*(v_x**2 + v_y**2)
         struct[0].h[2,0] = theta
+        struct[0].h[3,0] = f_x
     
 
     if mode == 10:
@@ -851,9 +854,10 @@ def run_nn(t,struct,mode):
     # Outputs:
     if mode == 3:
 
-        struct[0].h[0,0] = G*M*p_y
+        struct[0].h[0,0] = G*M*(L + p_y)
         struct[0].h[1,0] = 0.5*M*(v_x**2 + v_y**2)
         struct[0].h[2,0] = theta
+        struct[0].h[3,0] = f_x
     
 
     if mode == 10:

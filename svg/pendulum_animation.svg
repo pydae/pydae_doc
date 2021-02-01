@@ -15,7 +15,22 @@
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    sodipodi:docname="pendulum_animation.svg">
   <defs
-     id="defs2" />
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="Arrow1Sstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Sstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.2) translate(6,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path941" />
+    </marker>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -23,9 +38,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.9899495"
-     inkscape:cx="101.31881"
-     inkscape:cy="-40.925337"
+     inkscape:zoom="7.919596"
+     inkscape:cx="30.959099"
+     inkscape:cy="-91.910115"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -79,7 +94,7 @@
      id="layer1"
      transform="translate(-54.19671,-130.9026)">
     <rect
-       style="fill:none;stroke:#999999;stroke-width:0.132292;stop-color:#000000"
+       style="fill:none;stroke:none;stroke-width:0.132292;stop-color:#000000"
        id="rect923"
        width="34.372559"
        height="29.104166"
@@ -138,7 +153,7 @@
          cy="155.25372"
          r="1.3838332" />
       <circle
-         style="fill:#337ab7;stroke:none;stroke-width:0.132292;stop-color:#000000"
+         style="fill:#5cb85c;stroke:none;stroke-width:0.132292;stop-color:#000000"
          id="path868-1"
          cx="71.4375"
          cy="103.18751"
@@ -148,5 +163,17 @@
          d="m 71.425846,155.31042 -4.73e-4,2.11667"
          id="path925" />
     </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0838004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Sstart)"
+       d="m 73.024996,155.31042 h 0.582083"
+       id="path927"
+       inkscape:transform-center-x="-3.4395832" />
+    <ellipse
+       style="fill:#5cb85c;stroke:none;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="path1271"
+       cx="73.554161"
+       cy="155.31041"
+       rx="5.0759395e-14"
+       ry="5.2639374e-14" />
   </g>
 </svg>
