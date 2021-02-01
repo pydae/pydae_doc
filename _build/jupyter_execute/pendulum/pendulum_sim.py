@@ -576,7 +576,7 @@ times_s = pend.T[mask]
 values_s = values[mask]
 values_p_x = pend.get_values('p_x')[mask]
 values_p_y = pend.get_values('p_y')[mask]
-values_f_x = -pend.get_values('f_x')[mask]
+values_f_x = -pend.get_values('f_x')[mask] - 50*np.sign(pend.get_values('f_x')[mask])
 keyTimes = ""
 keyPoints = ""
 keyPoints_p_xy = ""
@@ -635,6 +635,24 @@ HTML(f'''<?xml version="1.0" encoding="UTF-8" standalone="no"?>
   <g
      id="layer1"
      transform="translate(-54.19671,-130.9026)">
+<rect transform="translate(72.8,154.6)" id="Rectangle-1" fill="#f0ad4e" sketch:type="MSShapeGroup" x="0" y="-0.5" width="1" height="1">
+        <animateTransform attributeName="transform"
+             type="translate"
+             additive="sum" 
+             keyTimes = {keyTimes} 
+             values = {keyPoints_p_xy}
+             dur="{t_end}s"
+             repeatCount="indefinite"
+        />
+<animateTransform attributeName="transform"
+             type="scale"
+             additive="sum" 
+             keyTimes = {keyTimes} 
+             values = {keyPoints_f_x}
+             dur="{t_end}s"
+             repeatCount="indefinite"
+        />
+</rect>  
     <rect
        style="fill:none;stroke:none;stroke-width:0.132292;stop-color:#000000"
        id="rect923"
@@ -699,7 +717,179 @@ HTML(f'''<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         keyTimes={keyTimes} 
         dur="{t_end}s" repeatCount="indefinite" />
     </g>
-<rect transform="translate(72.8,154.6)" id="Rectangle-1" fill="#f0ad4e" sketch:type="MSShapeGroup" x="0" y="-0.5" width="1" height="1">
+
+  </g>
+</svg>
+''')
+
+
+# ## Control
+
+# In[19]:
+
+
+Δt = 0.1
+p_ctrl = pendulum_class()
+times = np.arange(0,30,Δt)
+p_ctrl.initialize([{'M':30,'L':5.21,'theta':np.deg2rad(-10)}],-1)
+
+f_x_0 = p_ctrl.get_value('f_x')
+for t in times:
+    f_x = f_x_0
+    if t>2.0:
+        f_x = 0.0
+    p_ctrl.run([{'t_end':t,'f_x':f_x}])
+    
+p_ctrl.post();
+
+
+# In[20]:
+
+
+# plotting the results with matplolib:
+plt.close('all')
+fig, axes = plt.subplots(nrows=1,ncols=1, figsize=(6, 3), dpi=100)
+
+axes.plot(p_ctrl.T, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
+
+axes.grid()
+axes.set_ylabel('$\\theta (º)$')
+axes.set_xlabel('Time (s)')
+fig.tight_layout()
+fig.show()
+
+
+# Now we are going to propose a control law as follows:
+# 
+# $$
+# \Delta f_x = - K v_x
+# $$
+# 
+# $$
+# f_x = f_h + \Delta f_x 
+# $$
+# 
+# where $f_x$ is the hand effort and $\Delta f_x$ is the controller force increment.
+
+# In[21]:
+
+
+Δt = 0.1
+p_ctrl = pendulum_class()
+times = np.arange(0,25,Δt)
+p_ctrl.initialize([{'M':30,'L':5.21,'theta':np.deg2rad(-10)}],-1)
+
+K = 20.0
+f_x_0 = p_ctrl.get_value('f_x')
+for t in times:
+    f_x_hand = f_x_0
+    if t>2.0:
+        f_x_hand = 0.0
+    
+    v_x = p_ctrl.get_value('v_x')        # speed in x measurement
+     
+    f_x = f_x_hand - K*v_x            # control law
+    
+    p_ctrl.run([{'t_end':t,'f_x':f_x}])  # simulation until t(k+1) =  Δt + t(k) with the updated f_x force 
+    
+p_ctrl.post();  # required post processing
+
+
+# In[22]:
+
+
+# plotting the results with matplolib:
+plt.close('all')
+fig, axes = plt.subplots(nrows=1,ncols=1, figsize=(6, 3), dpi=100)
+
+axes.plot(p_ctrl.T, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
+
+axes.grid()
+axes.set_ylabel('$\\theta (º)$')
+axes.set_xlabel('Time (s)')
+fig.tight_layout()
+fig.show()
+
+
+# In[23]:
+
+
+pend = p_ctrl
+times = pend.T
+t_end = times[-1,0] 
+N_steps = 1000
+mask_values = pend.get_values('theta')
+values = np.rad2deg(pend.get_values('theta'))
+N_t = len(values)
+mask = np.array([True]*N_t)
+increment = np.abs((mask_values.max()-mask_values.min())/N_steps)
+mask[0:(N_t-1)] =  np.abs(np.diff(mask_values))>increment
+mask[0] = True
+mask[:] = True
+times_s = pend.T[mask]
+values_s = values[mask]
+values_p_x = pend.get_values('p_x')[mask] - 0.13*np.sign(pend.get_values('f_x')[mask]) -0.14
+values_p_y = pend.get_values('p_y')[mask]
+values_f_x = -pend.get_values('f_x')[mask] 
+keyTimes = ""
+keyPoints = ""
+keyPoints_p_xy = ""
+keyPoints_f_x = ""
+for it in range(len(times_s)):
+    keyTimes  += f'{times_s[it,0]/t_end};'
+    keyPoints += f'{(-values_s[it])},71.4375,103.18749;' 
+    keyPoints_p_xy += f'{(values_p_x[it])*10},{-(values_p_y[it]-values_p_y[0])*10};' 
+    keyPoints_f_x  += f'{(values_f_x[it])*0.1},{1};' 
+keyTimes  = keyTimes[:-1].replace("'",'"')    
+keyPoints = keyPoints[:-1].replace("'",'"') 
+keyPoints_p_xy = keyPoints_p_xy[:-1].replace("'",'"') 
+keyPoints_f_x = keyPoints_f_x[:-1].replace("'",'"') 
+
+HTML(f'''<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 34.504853 29.236458" 
+   height="400"
+   width="800">
+  <defs
+     id="defs2" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+   <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="Arrow1Sstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.2) translate(6,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path941" />
+    </marker>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-54.19671,-130.9026)">
+<rect transform="translate(72.8,154.6)" id="Rectangle-1" fill="#f0ad4e" sketch:type="MSShapeGroup" x="-0.1" y="-0.5" width="1" height="1">
         <animateTransform attributeName="transform"
              type="translate"
              additive="sum" 
@@ -716,7 +906,291 @@ HTML(f'''<?xml version="1.0" encoding="UTF-8" standalone="no"?>
              dur="{t_end}s"
              repeatCount="indefinite"
         />
-</rect>
+
+</rect>  
+    <rect
+       style="fill:none;stroke:none;stroke-width:0.132292;stop-color:#000000"
+       id="rect923"
+       width="34.372559"
+       height="29.104166"
+       x="54.262856"
+       y="130.96875" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.437498,103.1875 4.957897,56.66896"
+       id="path846-1" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 9.87805,56.0212"
+       id="path846-1-9" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 -4.957892,56.66896"
+       id="path846-1-9-6" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.437498,103.1875 -9.878052,56.02121"
+       id="path846-1-9-6-9" />
+    <path
+       style="fill:none;stroke:#555555;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000"
+       id="path833"
+       d="m 123.47135,103.1875 a 52.033852,52.033405 0 0 1 -26.016925,45.06225 52.033852,52.033405 0 0 1 -52.033852,0 52.033852,52.033405 0 0 1 -26.016925,-45.06225" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 5e-6,56.88542"
+       id="path846" />
+    <g
+       id="g890"
+       transform="rotate(-0.0128064,71.440161,103.18771)">
+      <rect
+         style="fill:#337ab7;stroke:none;stroke-width:0.499999;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000"
+         id="rect885"
+         width="0.39323467"
+         height="52.916477"
+         x="71.262543"
+         y="101.9165"
+         transform="matrix(0.99999974,-7.2630252e-4,-1.7091586e-4,0.99999999,0,0)" />
+      <circle
+         style="fill:#d9534f;stroke:#d9534f;stroke-width:0.132292;stop-color:#000000"
+         id="path868"
+         cx="71.4375"
+         cy="155.25372"
+         r="1.3838332" />
+      <circle
+         style="fill:#337ab7;stroke:none;stroke-width:0.132292;stop-color:#000000"
+         id="path868-1"
+         cx="71.4375"
+         cy="103.18751"
+         r="1.5198423" />
+      <path
+         style="fill:#d9534f;stroke:#d9534f;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 71.425846,155.31042 -4.73e-4,2.11667"
+         id="path925" />
+    <animateTransform attributeType="xml" attributeName="transform" type="rotate"
+    calcMode="discrete"
+    values={keyPoints}
+        keyTimes={keyTimes} 
+        dur="{t_end}s" repeatCount="indefinite" />
+    </g>
+
+
+        
+  </g>
+</svg>
+''')
+
+
+# In[ ]:
+
+
+
+
+
+# In[24]:
+
+
+Δt = 0.1
+p_ctrl = pendulum_class()
+times = np.arange(0,25,Δt)
+p_ctrl.initialize([{'M':30,'L':5.21,'theta':np.deg2rad(-10)}],-1)
+
+K = 20.0
+f_x_0 = p_ctrl.get_value('f_x')
+for t in times:
+    f_x_hand = f_x_0
+    if t>2.0:
+        f_x_hand = 0.0
+    
+    p_x = p_ctrl.get_value('p_x')        # position in x measurement
+    v_x = p_ctrl.get_value('v_x')        # speed in x measurement
+     
+    f_x = f_x_hand - np.sign(v_x)*5            # control law
+    
+    p_ctrl.run([{'t_end':t,'f_x':f_x}])  # simulation until t(k+1) =  Δt + t(k) with the updated f_x force 
+    
+p_ctrl.post();  # required post processing
+
+
+# In[25]:
+
+
+# plotting the results with matplolib:
+plt.close('all')
+fig, axes = plt.subplots(nrows=1,ncols=1, figsize=(6, 3), dpi=100)
+
+axes.plot(p_ctrl.T, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
+
+axes.grid()
+axes.set_ylabel('$\\theta (º)$')
+axes.set_xlabel('Time (s)')
+fig.tight_layout()
+fig.show()
+
+
+# In[26]:
+
+
+pend = p_ctrl
+times = pend.T
+t_end = times[-1,0] 
+N_steps = 1000
+mask_values = pend.get_values('theta')
+values = np.rad2deg(pend.get_values('theta'))
+N_t = len(values)
+mask = np.array([True]*N_t)
+increment = np.abs((mask_values.max()-mask_values.min())/N_steps)
+mask[0:(N_t-1)] =  np.abs(np.diff(mask_values))>increment
+mask[0] = True
+mask[:] = True
+times_s = pend.T[mask]
+values_s = values[mask]
+values_p_x = pend.get_values('p_x')[mask] - 0.13*np.sign(pend.get_values('f_x')[mask]) -0.14
+values_p_y = pend.get_values('p_y')[mask]
+values_f_x = -pend.get_values('f_x')[mask] 
+keyTimes = ""
+keyPoints = ""
+keyPoints_p_xy = ""
+keyPoints_f_x = ""
+for it in range(len(times_s)):
+    keyTimes  += f'{times_s[it,0]/t_end};'
+    keyPoints += f'{(-values_s[it])},71.4375,103.18749;' 
+    keyPoints_p_xy += f'{(values_p_x[it])*10},{-(values_p_y[it]-values_p_y[0])*10};' 
+    keyPoints_f_x  += f'{(values_f_x[it])*0.1},{1};' 
+keyTimes  = keyTimes[:-1].replace("'",'"')    
+keyPoints = keyPoints[:-1].replace("'",'"') 
+keyPoints_p_xy = keyPoints_p_xy[:-1].replace("'",'"') 
+keyPoints_f_x = keyPoints_f_x[:-1].replace("'",'"') 
+
+HTML(f'''<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 34.504853 29.236458" 
+   height="400"
+   width="800">
+  <defs
+     id="defs2" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+   <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="Arrow1Sstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.2) translate(6,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path941" />
+    </marker>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-54.19671,-130.9026)">
+<rect transform="translate(72.8,154.6)" id="Rectangle-1" fill="#f0ad4e" sketch:type="MSShapeGroup" x="-0.1" y="-0.5" width="1" height="1">
+        <animateTransform attributeName="transform"
+             type="translate"
+             additive="sum" 
+             keyTimes = {keyTimes} 
+             values = {keyPoints_p_xy}
+             dur="{t_end}s"
+             repeatCount="indefinite"
+        />
+<animateTransform attributeName="transform"
+             type="scale"
+             additive="sum" 
+             keyTimes = {keyTimes} 
+             values = {keyPoints_f_x}
+             dur="{t_end}s"
+             repeatCount="indefinite"
+        />
+
+</rect>  
+    <rect
+       style="fill:none;stroke:none;stroke-width:0.132292;stop-color:#000000"
+       id="rect923"
+       width="34.372559"
+       height="29.104166"
+       x="54.262856"
+       y="130.96875" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.437498,103.1875 4.957897,56.66896"
+       id="path846-1" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 9.87805,56.0212"
+       id="path846-1-9" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 -4.957892,56.66896"
+       id="path846-1-9-6" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.437498,103.1875 -9.878052,56.02121"
+       id="path846-1-9-6-9" />
+    <path
+       style="fill:none;stroke:#555555;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000"
+       id="path833"
+       d="m 123.47135,103.1875 a 52.033852,52.033405 0 0 1 -26.016925,45.06225 52.033852,52.033405 0 0 1 -52.033852,0 52.033852,52.033405 0 0 1 -26.016925,-45.06225" />
+    <path
+       style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.4375,103.18749 5e-6,56.88542"
+       id="path846" />
+    <g
+       id="g890"
+       transform="rotate(-0.0128064,71.440161,103.18771)">
+      <rect
+         style="fill:#337ab7;stroke:none;stroke-width:0.499999;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000"
+         id="rect885"
+         width="0.39323467"
+         height="52.916477"
+         x="71.262543"
+         y="101.9165"
+         transform="matrix(0.99999974,-7.2630252e-4,-1.7091586e-4,0.99999999,0,0)" />
+      <circle
+         style="fill:#d9534f;stroke:#d9534f;stroke-width:0.132292;stop-color:#000000"
+         id="path868"
+         cx="71.4375"
+         cy="155.25372"
+         r="1.3838332" />
+      <circle
+         style="fill:#337ab7;stroke:none;stroke-width:0.132292;stop-color:#000000"
+         id="path868-1"
+         cx="71.4375"
+         cy="103.18751"
+         r="1.5198423" />
+      <path
+         style="fill:#d9534f;stroke:#d9534f;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 71.425846,155.31042 -4.73e-4,2.11667"
+         id="path925" />
+    <animateTransform attributeType="xml" attributeName="transform" type="rotate"
+    calcMode="discrete"
+    values={keyPoints}
+        keyTimes={keyTimes} 
+        dur="{t_end}s" repeatCount="indefinite" />
+    </g>
+
+
+        
   </g>
 </svg>
 ''')
