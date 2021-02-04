@@ -1,14 +1,11 @@
-# Simulador de sistema de potencia
+# pydae
 
 
-En este documneto se explica como simular e interectuar con el simulador.
+## Overview
+pydae is an open source collection of Python subroutines for generation, solution and analysis of Differential Algebraic Equations (DAE) systems.
 
-## Esquema del sistema de potencia
+pydae combines cutting edge technologies like Python JIT compiling (using numba) with the symbolic module (sympy) to provide a user friendly API for solving nonlinear DAE problems.
 
-```{image} ./svg/proyecto_4cig_comm.svg
-:alt: fishy
-:width: 800px
-:align: center
-```
+pydae is oriented to the analysis of power systems problems but it can be used in other fields that requires a DAE solution enviroment.
 
-
+Since I have only solved easy academic problems I cannot assess the suitability of the library for professional environments

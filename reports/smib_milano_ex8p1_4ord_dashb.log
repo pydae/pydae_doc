@@ -1,0 +1,45 @@
+Traceback (most recent call last):
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\jupyter_cache\executors\utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\client.py", line 1087, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\util.py", line 74, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\util.py", line 53, in just_run
+    return loop.run_until_complete(coro)
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\asyncio\base_events.py", line 587, in run_until_complete
+    return future.result()
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\client.py", line 541, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\client.py", line 832, in async_execute_cell
+    self._check_raise_for_error(cell, exec_reply)
+  File "c:\users\jmmau\anaconda3\envs\workenv\lib\site-packages\nbclient\client.py", line 740, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply['content'])
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+T,X,Y =test(syst,0.0,1.0,use_numba=True)
+
+------------------
+
+[1;31m---------------------------------------------------------------------------[0m
+[1;31mAttributeError[0m                            Traceback (most recent call last)
+[1;32m<ipython-input-6-45955a8ce222>[0m in [0;36m<module>[1;34m[0m
+[1;32m----> 1[1;33m [0mT[0m[1;33m,[0m[0mX[0m[1;33m,[0m[0mY[0m [1;33m=[0m[0mtest[0m[1;33m([0m[0msyst[0m[1;33m,[0m[1;36m0.0[0m[1;33m,[0m[1;36m1.0[0m[1;33m,[0m[0muse_numba[0m[1;33m=[0m[1;32mTrue[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m
+[1;32m<ipython-input-5-d5aabbb51926>[0m in [0;36mtest[1;34m(syst, p_m, v_f, use_numba)[0m
+[0;32m     26[0m [1;33m[0m[0m
+[0;32m     27[0m     [0msyst[0m[1;33m.[0m[0mstruct[0m[1;33m[[0m[1;36m0[0m[1;33m][0m[1;33m.[0m[0mx[0m[1;33m[[0m[1;33m:[0m[1;33m,[0m[1;36m0[0m[1;33m][0m [1;33m=[0m [0mxy[0m[1;33m[[0m[1;36m0[0m[1;33m:[0m[0msyst[0m[1;33m.[0m[0mN_x[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+[1;32m---> 28[1;33m     [0msyst[0m[1;33m.[0m[0mstruct[0m[1;33m[[0m[1;36m0[0m[1;33m][0m[1;33m.[0m[0my[0m[1;33m[[0m[1;33m:[0m[1;33m,[0m[1;36m0[0m[1;33m][0m [1;33m=[0m [0mxy[0m[1;33m[[0m[0msyst[0m[1;33m.[0m[0mN_x[0m[1;33m:[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m     29[0m [1;33m[0m[0m
+[0;32m     30[0m     [0msyst[0m[1;33m.[0m[0mstruct[0m[1;33m[[0m[1;36m0[0m[1;33m][0m[1;33m.[0m[0my[0m[1;33m[[0m[0msyst[0m[1;33m.[0m[0my_list[0m[1;33m.[0m[0mindex[0m[1;33m([0m[1;34m'P_t'[0m[1;33m)[0m[1;33m,[0m[1;36m0[0m[1;33m][0m [1;33m=[0m [0msyst[0m[1;33m.[0m[0mstruct[0m[1;33m.[0m[0mP_t[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\envs\workenv\lib\site-packages\numpy\core\records.py[0m in [0;36m__getattribute__[1;34m(self, attr)[0m
+[0;32m    273[0m         [1;32melse[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    274[0m             raise AttributeError("'record' object has no "
+[1;32m--> 275[1;33m                     "attribute '%s'" % attr)
+[0m[0;32m    276[0m [1;33m[0m[0m
+[0;32m    277[0m     [1;32mdef[0m [0m__setattr__[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mattr[0m[1;33m,[0m [0mval[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+
+[1;31mAttributeError[0m: 'record' object has no attribute 'y'
+AttributeError: 'record' object has no attribute 'y'
+

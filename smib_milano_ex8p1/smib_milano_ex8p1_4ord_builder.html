@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulation &#8212; DAE systems in python</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">DAE systems in python</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   pydae
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  DAE theory
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../dae/dae.html">
+   Differential Algebraic Equations (DAE)
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Pendulum example
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pendulum/pendulum_doc.html">
+   Pendulum DAE system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pendulum/pendulum_sim.html">
+   Pendulum simulation
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/smib_milano_ex8p1/smib_milano_ex8p1_4ord_builder.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/main?urlpath=tree/docs/smib_milano_ex8p1/smib_milano_ex8p1_4ord_builder.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Formulation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#auxiliar-equations">
+     Auxiliar  equations
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#differential-equations">
+     Differential  equations
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algebraic-equations">
+     Algebraic equations
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#outputs">
+     Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#system-definition">
+   System definition
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sympy</span> <span class="k">as</span> <span class="nn">sym</span>
+<span class="kn">import</span> <span class="nn">numba</span>
+<span class="kn">import</span> <span class="nn">pydae.build</span> <span class="k">as</span> <span class="nn">db</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="formulation">
+<h1>Formulation<a class="headerlink" href="#formulation" title="Permalink to this headline">¶</a></h1>
+<p>Backward solution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{split} 
+\mathbf {\dot x}  &amp;  =  \mathbf {f (x,y^{ini},u^{ini}) } \\
+\mathbf 0 &amp; =  \mathbf {g (x,y^{ini},u^{ini}) }  
+\end{split}
+\end{split}\]</div>
+<p>Foreward solution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{split} 
+\mathbf {\dot x}  &amp;  =  \mathbf {f (x,y^{run},u^{run}) } \\
+\mathbf 0 &amp; =  \mathbf {g (x,y^{run},u^{run}) }  
+\end{split}
+\end{split}\]</div>
+<div class="section" id="auxiliar-equations">
+<h2>Auxiliar  equations<a class="headerlink" href="#auxiliar-equations" title="Permalink to this headline">¶</a></h2>
+<p>\begin{eqnarray}
+v_d &amp;=&amp; v_1\sin(\delta - \theta_1) \
+v_q &amp;=&amp; v_1\cos(\delta - \theta_1)
+\end{eqnarray}</p>
+<p>\begin{eqnarray}
+p_e = i_d \left(v_d + R_a i_d\right) + i_q \left(v_q + R_a i_q\right)
+\end{eqnarray}</p>
+</div>
+<div class="section" id="differential-equations">
+<h2>Differential  equations<a class="headerlink" href="#differential-equations" title="Permalink to this headline">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{eqnarray}
+ f_1 = \dot \delta &amp;=&amp;  \Omega_b \left( \omega -1 \right) \\
+ f_2 = \dot \omega &amp;=&amp;  \frac{1}{2H} \left( p_m - p_e - D   \left( \omega - 1 \right) \right)  \\
+ f_3 = \dot e_q &amp;=&amp; \frac{1}{T'_{d0}} \left( -e'_q - \left(X_d - X'_d \right) i_d + v_f^\star \right) \\
+ f_4 = \dot e_d &amp;=&amp;  \frac{1}{T'_{q0}} \left( -e'_d - \left(X_q - X'_q \right) i_q \right)       
+\end{eqnarray}
+\end{split}\]</div>
+</div>
+<div class="section" id="algebraic-equations">
+<h2>Algebraic equations<a class="headerlink" href="#algebraic-equations" title="Permalink to this headline">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{eqnarray}
+g_1 &amp;=&amp; v_q + R_a i_q + X_d' i_d - e_q \\
+g_2 &amp;=&amp; v_d + R_a i_d - X_q' i_q - e_d \\
+g_3 &amp;=&amp; p_t - \left(v_1 v_0 \sin \left(\theta_1 - \theta_0 \right) \right)/X_l \\
+g_4 &amp;=&amp; q_t + \left(v_1 v_0 \cos \left(\theta_1 - \theta_0 \right) \right)/X_l - v_1^2/X_l \\
+g_5 &amp;=&amp; i_d v_d + i_q v_q - p_t \\
+g_6 &amp;=&amp; i_d v_q - i_q v_d - q_t  
+\end{eqnarray}
+\end{split}\]</div>
+<p>The dynamic states are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf{f} =
+\left[
+\begin{array}{c}
+f_1\\
+f_2\\
+f_3\\
+f_4
+\end{array}
+\right]
+\;\;\;\;\;\;
+\mathbf{g} =
+\left[
+\begin{array}{c}
+g_1\\
+g_2\\
+g_3\\
+g_4\\
+g_5\\
+g_6
+\end{array}
+\right]
+\;\;\;\;\;\;
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf x = \left[
+\begin{array}{c} 
+\delta \\ 
+\omega \\ 
+ e_q'\\ 
+ e_d' 
+\end{array} \right]
+\;\;\;\;
+\mathbf {y^{ini}} = \left[
+\begin{array}{c} 
+i_d\\
+i_q\\
+v_1\\
+\theta_1\\
+p_m\\
+v_f 
+\end{array} \right] 
+\;\;\;\;
+\mathbf {y^{run}} = \left[
+\begin{array}{c} 
+i_d\\
+i_q\\
+v_1\\
+\theta_1\\
+p_t\\
+q_t 
+\end{array} \right] 
+\;\;\;\;
+\mathbf {u^{ini}} = \left[
+\begin{array}{c} 
+ p_t\\
+ q_t 
+\end{array} \right] 
+\;\;\;\;
+\mathbf {u^{run}} = \left[
+\begin{array}{c} 
+p_m \\
+v_f
+\end{array} \right]
+\end{split}\]</div>
+</div>
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf{h} =
+\left[
+\begin{array}{c}
+p_e \\
+p_m
+\end{array}
+\right]
+\;\;\;\;\;\;
+\mathbf{z} =
+\left[
+\begin{array}{c}
+p_e\\
+p_m
+\end{array}
+\right]
+\end{split}\]</div>
+</div>
+</div>
+<div class="section" id="system-definition">
+<h1>System definition<a class="headerlink" href="#system-definition" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;X_d&#39;</span><span class="p">:</span><span class="mf">1.81</span><span class="p">,</span><span class="s1">&#39;X1d&#39;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span><span class="s1">&#39;T1d0&#39;</span><span class="p">:</span><span class="mf">8.0</span><span class="p">,</span>
+               <span class="s1">&#39;X_q&#39;</span><span class="p">:</span><span class="mf">1.76</span><span class="p">,</span><span class="s1">&#39;X1q&#39;</span><span class="p">:</span><span class="mf">0.65</span><span class="p">,</span><span class="s1">&#39;T1q0&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="s1">&#39;R_a&#39;</span><span class="p">:</span><span class="mf">0.003</span><span class="p">,</span><span class="s1">&#39;X_line&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span> 
+               <span class="s1">&#39;H&#39;</span><span class="p">:</span><span class="mf">3.5</span><span class="p">,</span><span class="s1">&#39;D&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="s1">&#39;Omega_b&#39;</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">50</span><span class="p">,</span><span class="s1">&#39;omega_s&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="s1">&#39;v_0&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">,</span><span class="s1">&#39;theta_0&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;B_shunt&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">}</span>
+
+
+<span class="n">u_ini_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;p_t&#39;</span><span class="p">:</span><span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;q_t&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">}</span>  <span class="c1"># for the initialization problem</span>
+<span class="n">u_run_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;p_m&#39;</span><span class="p">:</span><span class="mf">0.8</span><span class="p">,</span><span class="s1">&#39;v_f&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">}</span>  <span class="c1"># for the running problem (here initialization and running problem are the same)</span>
+
+
+<span class="n">x_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span><span class="s1">&#39;e1q&#39;</span><span class="p">,</span><span class="s1">&#39;e1d&#39;</span><span class="p">]</span>    <span class="c1"># [inductor current, PI integrator]</span>
+<span class="n">y_ini_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;i_d&#39;</span><span class="p">,</span><span class="s1">&#39;i_q&#39;</span><span class="p">,</span><span class="s1">&#39;v_1&#39;</span><span class="p">,</span><span class="s1">&#39;theta_1&#39;</span><span class="p">,</span><span class="s1">&#39;p_m&#39;</span><span class="p">,</span><span class="s1">&#39;v_f&#39;</span><span class="p">]</span> <span class="c1"># for the initialization problem</span>
+<span class="n">y_run_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;i_d&#39;</span><span class="p">,</span><span class="s1">&#39;i_q&#39;</span><span class="p">,</span><span class="s1">&#39;v_1&#39;</span><span class="p">,</span><span class="s1">&#39;theta_1&#39;</span><span class="p">,</span><span class="s1">&#39;p_t&#39;</span><span class="p">,</span><span class="s1">&#39;q_t&#39;</span><span class="p">]</span> <span class="c1"># for the running problem (here initialization and running problem are the same)</span>
+
+<span class="n">sys_vars</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;params_dict&#39;</span><span class="p">:</span><span class="n">params_dict</span><span class="p">,</span>
+            <span class="s1">&#39;u_list&#39;</span><span class="p">:</span><span class="n">u_run_dict</span><span class="p">,</span>
+            <span class="s1">&#39;x_list&#39;</span><span class="p">:</span><span class="n">x_list</span><span class="p">,</span>
+            <span class="s1">&#39;y_list&#39;</span><span class="p">:</span><span class="n">y_run_list</span><span class="p">}</span>
+
+<span class="n">exec</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">sym_gen_str</span><span class="p">())</span>  <span class="c1"># exec to generate the required symbolic varables and constants</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Auxiliar equations</span>
+<span class="n">v_d</span> <span class="o">=</span> <span class="n">v_1</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">delta</span> <span class="o">-</span> <span class="n">theta_1</span><span class="p">)</span> 
+<span class="n">v_q</span> <span class="o">=</span> <span class="n">v_1</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">delta</span> <span class="o">-</span> <span class="n">theta_1</span><span class="p">)</span> 
+
+<span class="n">p_e</span> <span class="o">=</span> <span class="n">i_d</span><span class="o">*</span><span class="p">(</span><span class="n">v_d</span> <span class="o">+</span> <span class="n">R_a</span><span class="o">*</span><span class="n">i_d</span><span class="p">)</span> <span class="o">+</span> <span class="n">i_q</span><span class="o">*</span><span class="p">(</span><span class="n">v_q</span> <span class="o">+</span> <span class="n">R_a</span><span class="o">*</span><span class="n">i_q</span><span class="p">)</span> 
+
+<span class="c1"># Differential equations</span>
+<span class="n">ddelta</span> <span class="o">=</span> <span class="n">Omega_b</span><span class="o">*</span><span class="p">(</span><span class="n">omega</span> <span class="o">-</span> <span class="n">omega_s</span><span class="p">)</span>
+<span class="n">domega</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">H</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p_m</span> <span class="o">-</span> <span class="n">p_e</span> <span class="o">-</span> <span class="n">D</span><span class="o">*</span><span class="p">(</span><span class="n">omega</span> <span class="o">-</span> <span class="n">omega_s</span><span class="p">))</span>
+<span class="n">de1q</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">T1d0</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="n">e1q</span> <span class="o">-</span> <span class="p">(</span><span class="n">X_d</span> <span class="o">-</span> <span class="n">X1d</span><span class="p">)</span><span class="o">*</span><span class="n">i_d</span> <span class="o">+</span> <span class="n">v_f</span><span class="p">)</span>
+<span class="n">de1d</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">T1q0</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="n">e1d</span> <span class="o">+</span> <span class="p">(</span><span class="n">X_q</span> <span class="o">-</span> <span class="n">X1q</span><span class="p">)</span><span class="o">*</span><span class="n">i_q</span><span class="p">)</span>
+
+<span class="c1"># Algebraic equations</span>
+<span class="n">g_1</span> <span class="o">=</span> <span class="n">v_q</span> <span class="o">+</span> <span class="n">R_a</span><span class="o">*</span><span class="n">i_q</span> <span class="o">+</span> <span class="n">X1d</span><span class="o">*</span><span class="n">i_d</span> <span class="o">-</span> <span class="n">e1q</span>
+<span class="n">g_2</span> <span class="o">=</span> <span class="n">v_d</span> <span class="o">+</span> <span class="n">R_a</span><span class="o">*</span><span class="n">i_d</span> <span class="o">-</span> <span class="n">X1q</span><span class="o">*</span><span class="n">i_q</span> <span class="o">-</span> <span class="n">e1d</span>
+<span class="n">g_3</span> <span class="o">=</span> <span class="n">p_t</span> <span class="o">-</span> <span class="p">(</span><span class="n">v_1</span><span class="o">*</span><span class="n">v_0</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_1</span> <span class="o">-</span> <span class="n">theta_0</span><span class="p">))</span><span class="o">/</span><span class="n">X_line</span>
+<span class="n">g_4</span> <span class="o">=</span> <span class="n">q_t</span> <span class="o">+</span> <span class="p">(</span><span class="n">v_1</span><span class="o">*</span><span class="n">v_0</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_1</span> <span class="o">-</span> <span class="n">theta_0</span><span class="p">))</span><span class="o">/</span><span class="n">X_line</span> <span class="o">-</span> <span class="n">v_1</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">X_line</span> <span class="o">-</span> <span class="n">v_1</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">B_shunt</span>
+<span class="n">g_5</span> <span class="o">=</span> <span class="n">i_d</span><span class="o">*</span><span class="n">v_d</span> <span class="o">+</span> <span class="n">i_q</span><span class="o">*</span><span class="n">v_q</span> <span class="o">-</span> <span class="n">p_t</span>
+<span class="n">g_6</span> <span class="o">=</span> <span class="n">i_d</span><span class="o">*</span><span class="n">v_q</span> <span class="o">-</span> <span class="n">i_q</span><span class="o">*</span><span class="n">v_d</span> <span class="o">-</span> <span class="n">q_t</span>
+
+<span class="c1"># Outputs </span>
+<span class="n">h_1</span> <span class="o">=</span> <span class="n">p_m</span>
+<span class="n">h_2</span> <span class="o">=</span> <span class="n">p_e</span>
+
+<span class="c1"># System dictionary</span>
+<span class="n">sys</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;smib_milano_ex8p1_4ord&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;params_dict&#39;</span><span class="p">:</span><span class="n">params</span><span class="p">,</span>
+       <span class="s1">&#39;f_list&#39;</span><span class="p">:[</span><span class="n">ddelta</span><span class="p">,</span><span class="n">domega</span><span class="p">,</span><span class="n">de1q</span><span class="p">,</span><span class="n">de1d</span><span class="p">],</span>
+       <span class="s1">&#39;g_list&#39;</span><span class="p">:[</span><span class="n">g_1</span><span class="p">,</span><span class="n">g_2</span><span class="p">,</span><span class="n">g_3</span><span class="p">,</span><span class="n">g_4</span><span class="p">,</span><span class="n">g_5</span><span class="p">,</span><span class="n">g_6</span><span class="p">],</span>
+       <span class="s1">&#39;x_list&#39;</span><span class="p">:</span><span class="n">x_list</span><span class="p">,</span>
+       <span class="s1">&#39;y_ini_list&#39;</span><span class="p">:</span><span class="n">y_ini_list</span><span class="p">,</span>
+       <span class="s1">&#39;y_run_list&#39;</span><span class="p">:</span><span class="n">y_run_list</span><span class="p">,</span>
+       <span class="s1">&#39;u_run_dict&#39;</span><span class="p">:</span><span class="n">u_run_dict</span><span class="p">,</span>
+       <span class="s1">&#39;u_ini_dict&#39;</span><span class="p">:</span><span class="n">u_ini_dict</span><span class="p">,</span>
+       <span class="s1">&#39;h_dict&#39;</span><span class="p">:{</span><span class="s1">&#39;p_m&#39;</span><span class="p">:</span><span class="n">h_1</span><span class="p">,</span><span class="s1">&#39;p_e&#39;</span><span class="p">:</span><span class="n">h_2</span><span class="p">}}</span>
+
+
+<span class="n">sys</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">sys2num</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>      <span class="c1"># building system module</span>
+                
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./smib_milano_ex8p1"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Juan Manuel Mauricio<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>
