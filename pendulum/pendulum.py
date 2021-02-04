@@ -23,7 +23,7 @@ class pendulum_class:
         self.imax = 100 
         self.N_x = 4
         self.N_y = 2 
-        self.N_z = 4 
+        self.N_z = 3 
         self.N_store = 10000 
         self.params_list = ['L', 'G', 'M', 'K_d'] 
         self.params_values_list  = [5.21, 9.81, 10.0, 0.001] 
@@ -31,7 +31,7 @@ class pendulum_class:
         self.inputs_ini_values_list  = [0.08726646259971647] 
         self.inputs_run_list = ['f_x'] 
         self.inputs_run_values_list = [0] 
-        self.outputs_list = ['E_p', 'E_k', 'theta', 'f_x'] 
+        self.outputs_list = ['E_p', 'E_k', 'f_x'] 
         self.x_list = ['p_x', 'p_y', 'v_x', 'v_y'] 
         self.y_run_list = ['lam', 'theta'] 
         self.xy_list = self.x_list + self.y_run_list 
@@ -191,8 +191,12 @@ class pendulum_class:
     def ini_problem(self,x):
         self.struct[0].x[:,0] = x[0:self.N_x]
         self.struct[0].y_ini[:,0] = x[self.N_x:(self.N_x+self.N_y)]
-        ini(self.struct,2)
-        ini(self.struct,3)       
+        if self.compile:
+            ini(self.struct,2)
+            ini(self.struct,3)       
+        else:
+            ini.py_func(self.struct,2)
+            ini.py_func(self.struct,3)                   
         fg = np.vstack((self.struct[0].f,self.struct[0].g))[:,0]
         return fg
 
@@ -200,12 +204,21 @@ class pendulum_class:
         t = self.struct[0].t
         self.struct[0].x[:,0] = x[0:self.N_x]
         self.struct[0].y_run[:,0] = x[self.N_x:(self.N_x+self.N_y)]
-        run(t,self.struct,2)
-        run(t,self.struct,3)
-        run(t,self.struct,10)
-        run(t,self.struct,11)
-        run(t,self.struct,12)
-        run(t,self.struct,13)
+        
+        if self.compile:
+            run(t,self.struct,2)
+            run(t,self.struct,3)
+            run(t,self.struct,10)
+            run(t,self.struct,11)
+            run(t,self.struct,12)
+            run(t,self.struct,13)
+        else:
+            run.py_func(t,self.struct,2)
+            run.py_func(t,self.struct,3)
+            run.py_func(t,self.struct,10)
+            run.py_func(t,self.struct,11)
+            run.py_func(t,self.struct,12)
+            run.py_func(t,self.struct,13)            
         
         fg = np.vstack((self.struct[0].f,self.struct[0].g))[:,0]
         return fg
@@ -244,8 +257,12 @@ class pendulum_class:
     def ini_dae_jacobian(self,x):
         self.struct[0].x[:,0] = x[0:self.N_x]
         self.struct[0].y_ini[:,0] = x[self.N_x:(self.N_x+self.N_y)]
-        ini(self.struct,10)
-        ini(self.struct,11)       
+        if self.compile:
+            ini(self.struct,10)
+            ini(self.struct,11) 
+        else:
+            ini.py_func(self.struct,10)
+            ini.py_func(self.struct,11)             
         A_c = np.block([[self.struct[0].Fx_ini,self.struct[0].Fy_ini],
                         [self.struct[0].Gx_ini,self.struct[0].Gy_ini]])
         return A_c
@@ -393,7 +410,7 @@ class pendulum_class:
                 self.xy_prev[self.y_ini_list.index(item)+self.N_x] = xy_0_dict[item]
                 
             
-    def initialize(self,events=[{}],xy0=0):
+    def initialize(self,events=[{}],xy0=0,compile=True):
         '''
         
 
@@ -419,6 +436,9 @@ class pendulum_class:
             DESCRIPTION.
 
         '''
+        
+        self.compile = compile
+        
         # simulation parameters
         self.struct[0].it = 0       # set time step to zero
         self.struct[0].it_store = 0 # set storage to zero
@@ -497,16 +517,28 @@ class pendulum_class:
             else:
                 sol = sopt.root(self.run_problem, xy0, method=self.sopt_root_method)
 
-            # evaluate f and g
-            run(0.0,self.struct,2)
-            run(0.0,self.struct,3)                
-
-            
-            # evaluate run jacobians 
-            run(0.0,self.struct,10)
-            run(0.0,self.struct,11)                
-            run(0.0,self.struct,12) 
-            run(0.0,self.struct,14) 
+            if self.compile:
+                # evaluate f and g
+                run(0.0,self.struct,2)
+                run(0.0,self.struct,3)                
+    
+                # evaluate run jacobians 
+                run(0.0,self.struct,10)
+                run(0.0,self.struct,11)                
+                run(0.0,self.struct,12) 
+                run(0.0,self.struct,14) 
+                
+            else:
+                # evaluate f and g
+                run.py_func(0.0,self.struct,2)
+                run.py_func(0.0,self.struct,3)                
+    
+                # evaluate run jacobians 
+                run.py_func(0.0,self.struct,10)
+                run.py_func(0.0,self.struct,11)                
+                run.py_func(0.0,self.struct,12) 
+                run.py_func(0.0,self.struct,14)                 
+                
              
             # post process result    
             T = self.struct[0]['T'][:self.struct[0].it_store]
@@ -644,8 +676,7 @@ def ini(struct,mode):
 
         struct[0].h[0,0] = G*M*(L + p_y)
         struct[0].h[1,0] = 0.5*M*(v_x**2 + v_y**2)
-        struct[0].h[2,0] = theta
-        struct[0].h[3,0] = f_x
+        struct[0].h[2,0] = f_x
     
 
     if mode == 10:
@@ -714,8 +745,7 @@ def run(t,struct,mode):
 
         struct[0].h[0,0] = G*M*(L + p_y)
         struct[0].h[1,0] = 0.5*M*(v_x**2 + v_y**2)
-        struct[0].h[2,0] = theta
-        struct[0].h[3,0] = f_x
+        struct[0].h[2,0] = f_x
     
 
     if mode == 10:
@@ -744,7 +774,6 @@ def run(t,struct,mode):
         struct[0].Hx[1,2] = 1.0*M*v_x
         struct[0].Hx[1,3] = 1.0*M*v_y
 
-        struct[0].Hy[2,1] = 1
 
 
 
@@ -791,8 +820,7 @@ def ini_nn(struct,mode):
 
         struct[0].h[0,0] = G*M*(L + p_y)
         struct[0].h[1,0] = 0.5*M*(v_x**2 + v_y**2)
-        struct[0].h[2,0] = theta
-        struct[0].h[3,0] = f_x
+        struct[0].h[2,0] = f_x
     
 
     if mode == 10:
@@ -856,8 +884,7 @@ def run_nn(t,struct,mode):
 
         struct[0].h[0,0] = G*M*(L + p_y)
         struct[0].h[1,0] = 0.5*M*(v_x**2 + v_y**2)
-        struct[0].h[2,0] = theta
-        struct[0].h[3,0] = f_x
+        struct[0].h[2,0] = f_x
     
 
     if mode == 10:

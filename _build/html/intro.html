@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simulador de sistema de potencia &#8212; Simulador de sistema de potencia con CIG</title>
+    <title>pydae &#8212; DAE systems in python</title>
     
   <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -75,10 +75,10 @@
         <div class="navbar-brand-box">
 <a class="navbar-brand text-wrap" href="index.html">
   
-  <img src="_static/logo.png" class="logo" alt="logo">
+  <img src="_static/logo.svg" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">Simulador de sistema de potencia con CIG</h1>
+  <h1 class="site-logo" id="site-title">DAE systems in python</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -89,16 +89,28 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="reference internal" href="#">
-   Simulador de sistema de potencia
+   pydae
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  DAE theory
+ </span>
+</p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="dae/dae.html">
    Differential Algebraic Equations (DAE)
   </a>
  </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Pendulum example
+ </span>
+</p>
+<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="pendulum/pendulum_doc.html">
    Pendulum DAE system
@@ -168,10 +180,7 @@
             href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
         
     </div>
 </div>
@@ -196,9 +205,11 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#esquema-del-sistema-de-potencia">
-   Esquema del sistema de potencia
+  <a class="reference internal nav-link" href="#overview">
+   Overview
   </a>
+  <ul class="nav section-nav flex-column">
+  </ul>
  </li>
 </ul>
 
@@ -211,12 +222,16 @@
         
               <div>
                 
-  <div class="section" id="simulador-de-sistema-de-potencia">
-<h1>Simulador de sistema de potencia<a class="headerlink" href="#simulador-de-sistema-de-potencia" title="Permalink to this headline">¶</a></h1>
-<p>En este documneto se explica como simular e interectuar con el simulador.</p>
-<div class="section" id="esquema-del-sistema-de-potencia">
-<h2>Esquema del sistema de potencia<a class="headerlink" href="#esquema-del-sistema-de-potencia" title="Permalink to this headline">¶</a></h2>
-<a class="reference internal image-reference" href="_images/proyecto_4cig_comm.svg"><img alt="fishy" class="align-center" src="_images/proyecto_4cig_comm.svg" width="800px" /></a>
+  <div class="section" id="pydae">
+<h1>pydae<a class="headerlink" href="#pydae" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>pydae is an open source collection of Python subroutines for generation, solution and analysis of Differential Algebraic Equations (DAE) systems.</p>
+<p>pydae combines cutting edge technologies like Python JIT compiling (using numba) with the symbolic module (sympy) to provide a user friendly API for solving nonlinear DAE problems.</p>
+<p>pydae is oriented to the analysis of power systems problems but it can be used in other fields that requires a DAE solution enviroment.</p>
+<p>Since I have only solved easy academic problems I cannot assess the suitability of the library for professional environments</p>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </div>

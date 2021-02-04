@@ -10,6 +10,13 @@ from IPython.lib.display import YouTubeVideo
 YouTubeVideo('4a0FbQdH3dY')
 
 
+# - 9.43 he sets the bom in 5deg (How much force in x did he applied?)
+# - 11.35 he sets the bom in 10deg (How much force in x did he applied?)
+# - 16:20 change in mass
+# - 24:00 without little push  
+# - 24:42 with little push glass broken
+# - 26:50 dagerous experiment
+
 # ## Formulation
 # 
 # Backward solution:
@@ -50,8 +57,7 @@ YouTubeVideo('4a0FbQdH3dY')
 # \end{eqnarray}
 # $$
 # 
-# 
-# The dynamic states are:
+# ### DAE equations in vector form
 # 
 # $$
 # \mathbf{f} =
@@ -73,6 +79,8 @@ YouTubeVideo('4a0FbQdH3dY')
 # \right]
 # \;\;\;\;\;\;
 # $$
+# 
+# ### Dynamic and algebraic states and inputs
 # 
 # $$
 # \mathbf x = \left[
@@ -109,11 +117,13 @@ YouTubeVideo('4a0FbQdH3dY')
 # ### Outputs
 # 
 # We may be interested in the potential energy:
+# 
 # $$
-# E_p = M G p_y
+# E_p = M G \left(p_y + L\right)
 # $$
 # 
 # And the kinetical energy:
+# 
 # $$
 # E_k = \frac{1}{2} M \left(v_x^2 + v_y^2 \right)
 # $$
@@ -136,9 +146,7 @@ YouTubeVideo('4a0FbQdH3dY')
 # \right]
 # $$
 
-# 9.45 he sets the bom in 5deg (How much force in x did he applied?)
-# 
-# 
+# ## pydae model building
 
 # In[2]:
 
@@ -186,7 +194,7 @@ g_1 = p_x**2 + p_y**2 - L**2 -lam*1e-6
 g_2 = -theta + sym.atan2(p_x,-p_y)
 
 
-# ## Build the model
+# ### Build the model
 
 # In[5]:
 
@@ -204,6 +212,12 @@ sys = {'name':'pendulum',
 
 sys = db.system(sys)
 db.sys2num(sys)
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:

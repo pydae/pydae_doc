@@ -1,0 +1,42 @@
+<ns0:svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns2="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" id="svg8" version="1.1" viewBox="0 0 34.504853 29.236458" height="400" width="800">
+  <ns0:defs id="defs2" />
+  <ns0:metadata id="metadata5">
+    <rdf:RDF>
+      <ns2:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </ns2:Work>
+    </rdf:RDF>
+  </ns0:metadata>
+  <ns0:g id="layer1" transform="translate(-54.19671,-130.9026)">
+    <ns0:rect style="fill:none;stroke:none;stroke-width:0.132292;stop-color:#000000" id="rect923" width="34.372559" height="29.104166" x="54.262856" y="130.96875" />
+    <ns0:path style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 71.437498,103.1875 4.957897,56.66896" id="path846-1" />
+    <ns0:path style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 71.4375,103.18749 9.87805,56.0212" id="path846-1-9" />
+    <ns0:path style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 71.4375,103.18749 -4.957892,56.66896" id="path846-1-9-6" />
+    <ns0:path style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 71.437498,103.1875 -9.878052,56.02121" id="path846-1-9-6-9" />
+    <ns0:path style="fill:none;stroke:#555555;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000" id="path833" d="m 123.47135,103.1875 a 52.033852,52.033405 0 0 1 -26.016925,45.06225 52.033852,52.033405 0 0 1 -52.033852,0 52.033852,52.033405 0 0 1 -26.016925,-45.06225" />
+    <ns0:path style="fill:none;stroke:#999999;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 71.4375,103.18749 5e-6,56.88542" id="path846" />
+    <ns0:g id="g890" transform="rotate(-0.0128064,71.440161,103.18771)"><ns0:rect style="fill:#337ab7;stroke:none;stroke-width:0.499999;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000" id="rect885" width="0.39323467" height="52.916477" x="71.262543" y="101.9165" transform="matrix(0.99999974,-7.2630252e-4,-1.7091586e-4,0.99999999,0,0)" />
+<ns0:circle style="fill:#d9534f;stroke:#d9534f;stroke-width:0.132292;stop-color:#000000" id="path868" cx="71.4375" cy="155.25372" r="1.3838332" />
+<ns0:circle style="fill:#337ab7;stroke:none;stroke-width:0.132292;stop-color:#000000" id="path868-1" cx="71.4375" cy="103.18751" r="1.5198423" />
+<ns0:path style="fill:#d9534f;stroke:#d9534f;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 71.425846,155.31042 -4.73e-4,2.11667" id="path925" />
+<ns0:animateTransform attributeType="xml" attributeName="transform" type="rotate" calcMode="discrete" />
+
+{keyPoints_5}
+        keyTimes={keyTimes_5} 
+        dur="{t_end}s" repeatCount="indefinite" /&gt;
+    </ns0:g>
+    <ns0:g id="g24" transform="rotate(-0.0128064,71.440161,103.18771)"><ns0:rect style="fill:#337ab7;stroke:none;stroke-width:0.499999;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stop-color:#000000" id="rect16" width="0.39323467" height="52.916477" x="71.262543" y="101.9165" transform="matrix(0.99999974,-7.2630252e-4,-1.7091586e-4,0.99999999,0,0)" />
+<ns0:circle style="fill:#5cb85c;stroke:#5cb85c;stroke-width:0.132292;stop-color:#000000" id="circle18" cx="71.4375" cy="155.25372" r="1.3838332" />
+<ns0:circle style="fill:#337ab7;stroke:none;stroke-width:0.132292;stop-color:#000000" id="circle20" cx="71.4375" cy="103.18751" r="1.5198423" />
+<ns0:path style="fill:#5cb85c;stroke:#5cb85c;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 71.425846,155.31042 -4.73e-4,2.11667" id="path22" />
+<ns0:animateTransform attributeType="xml" attributeName="transform" type="rotate" calcMode="discrete" />
+
+{keyPoints_10}
+        keyTimes={keyTimes_10} 
+        dur="{t_end}s" repeatCount="indefinite" /&gt;
+    </ns0:g>
+  </ns0:g>
+  <ns0:text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:2.92365px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0730911" x="0.47372892" y="27.665205" id="text855"><ns0:tspan id="tspan853" x="0.47372892" y="27.665205" style="stroke-width:0.0730911">-10&#186;</ns0:tspan></ns0:text>
+<a x="1" y="abc">body text</a></ns0:svg>

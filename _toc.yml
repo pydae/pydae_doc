@@ -2,7 +2,10 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
 - file: intro
-  sections:
-    - file: dae/dae
-    - file: pendulum/pendulum_doc
-    - file: pendulum/pendulum_sim
+- part: DAE theory
+  chapters:
+  - file: dae/dae
+- part: Pendulum example
+  chapters:
+  - file: pendulum/pendulum_doc
+  - file: pendulum/pendulum_sim

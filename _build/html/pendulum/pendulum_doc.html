@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pendulum DAE system &#8212; Simulador de sistema de potencia con CIG</title>
+    <title>Pendulum DAE system &#8212; DAE systems in python</title>
     
   <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -76,10 +76,10 @@
         <div class="navbar-brand-box">
 <a class="navbar-brand text-wrap" href="../index.html">
   
-  <img src="../_static/logo.png" class="logo" alt="logo">
+  <img src="../_static/logo.svg" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">Simulador de sistema de potencia con CIG</h1>
+  <h1 class="site-logo" id="site-title">DAE systems in python</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -90,16 +90,28 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../intro.html">
-   Simulador de sistema de potencia
+   pydae
   </a>
  </li>
 </ul>
-<ul class="current nav sidenav_l1">
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  DAE theory
+ </span>
+</p>
+<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../dae/dae.html">
    Differential Algebraic Equations (DAE)
   </a>
  </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Pendulum example
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Pendulum DAE system
@@ -169,10 +181,7 @@
             href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fpendulum/pendulum_doc.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
         
     </div>
 </div>
@@ -191,7 +200,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/pendulum/pendulum_doc.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/main?urlpath=tree/docs/pendulum/pendulum_doc.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../_static/images/logo_binder.svg"
@@ -229,10 +238,27 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dae-equations-in-vector-form">
+     DAE equations in vector form
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dynamic-and-algebraic-states-and-inputs">
+     Dynamic and algebraic states and inputs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#outputs">
      Outputs
     </a>
    </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pydae-model-building">
+   pydae model building
+  </a>
+  <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#definition-of-variables-and-constants">
      Definition of variables and constants
@@ -243,12 +269,12 @@
      System formulation
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#build-the-model">
+     Build the model
+    </a>
+   </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#build-the-model">
-   Build the model
-  </a>
  </li>
 </ul>
 
@@ -281,6 +307,14 @@
 ></iframe>
 </div></div>
 </div>
+<ul class="simple">
+<li><p>9.43 he sets the bom in 5deg (How much force in x did he applied?)</p></li>
+<li><p>11.35 he sets the bom in 10deg (How much force in x did he applied?)</p></li>
+<li><p>16:20 change in mass</p></li>
+<li><p>24:00 without little push</p></li>
+<li><p>24:42 with little push glass broken</p></li>
+<li><p>26:50 dagerous experiment</p></li>
+</ul>
 <div class="section" id="formulation">
 <h2>Formulation<a class="headerlink" href="#formulation" title="Permalink to this headline">¶</a></h2>
 <p>Backward solution:</p>
@@ -320,7 +354,9 @@ g_1 &amp;=&amp; p_x^2 + p_y^2 - L^2  \\
 g_2 &amp;=&amp; -\theta + \arctan\left(p_x,-p_y\right) 
 \end{eqnarray}
 \end{split}\]</div>
-<p>The dynamic states are:</p>
+</div>
+<div class="section" id="dae-equations-in-vector-form">
+<h3>DAE equations in vector form<a class="headerlink" href="#dae-equations-in-vector-form" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \mathbf{f} =
@@ -342,6 +378,9 @@ g_2
 \right]
 \;\;\;\;\;\;
 \end{split}\]</div>
+</div>
+<div class="section" id="dynamic-and-algebraic-states-and-inputs">
+<h3>Dynamic and algebraic states and inputs<a class="headerlink" href="#dynamic-and-algebraic-states-and-inputs" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \mathbf x = \left[
@@ -377,14 +416,16 @@ f_x
 </div>
 <div class="section" id="outputs">
 <h3>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h3>
-<p>We may be interested in the potential energy:
-$<span class="math notranslate nohighlight">\(
-E_p = M G p_y
-\)</span>$</p>
-<p>And the kinetical energy:
-$<span class="math notranslate nohighlight">\(
+<p>We may be interested in the potential energy:</p>
+<div class="math notranslate nohighlight">
+\[
+E_p = M G \left(p_y + L\right)
+\]</div>
+<p>And the kinetical energy:</p>
+<div class="math notranslate nohighlight">
+\[
 E_k = \frac{1}{2} M \left(v_x^2 + v_y^2 \right)
-\)</span>$</p>
+\]</div>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \mathbf{h} =
@@ -403,14 +444,16 @@ E_k
 \end{array}
 \right]
 \end{split}\]</div>
-<p>9.45 he sets the bom in 5deg (How much force in x did he applied?)</p>
+</div>
+</div>
+<div class="section" id="pydae-model-building">
+<h2>pydae model building<a class="headerlink" href="#pydae-model-building" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sympy</span> <span class="k">as</span> <span class="nn">sym</span>
 <span class="kn">import</span> <span class="nn">pydae.build</span> <span class="k">as</span> <span class="nn">db</span>
 </pre></div>
-</div>
 </div>
 </div>
 </div>
@@ -456,9 +499,8 @@ E_k
 </div>
 </div>
 </div>
-</div>
 <div class="section" id="build-the-model">
-<h2>Build the model<a class="headerlink" href="#build-the-model" title="Permalink to this headline">¶</a></h2>
+<h3>Build the model<a class="headerlink" href="#build-the-model" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;pendulum&#39;</span><span class="p">,</span>
@@ -475,6 +517,7 @@ E_k
 <span class="n">sys</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
 <span class="n">db</span><span class="o">.</span><span class="n">sys2num</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
 </pre></div>
+</div>
 </div>
 </div>
 </div>
