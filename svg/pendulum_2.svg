@@ -189,5 +189,27 @@
          x="82.638489"
          y="89.07457"
          style="font-size:1.41111px;fill:#555555;stroke-width:0.264583">10º</tspan></text>
+    <g
+       id="play"
+       transform="translate(-0.09958323,-0.10033387)">
+      <rect
+         style="fill:#5e4485;stroke:none;stroke-width:0.293939;stop-color:#000000"
+         id="rect872"
+         width="2.1166668"
+         height="1.5875055"
+         x="60.987602"
+         y="70.154503" />
+      <path
+         style="fill:#eeeeee;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 62.442811,70.948255 -0.79375,-0.529166 v 1.058333 z"
+         id="path868"
+         sodipodi:nodetypes="cccc" />
+    </g>
+    <circle
+       style="fill:#f0ad4e;stroke-width:0.0253538;stop-color:#000000"
+       id="path1467"
+       cx="62.343231"
+       cy="70.847931"
+       r="0.0049999999" />
   </g>
 </svg>

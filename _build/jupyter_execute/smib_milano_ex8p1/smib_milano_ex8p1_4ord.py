@@ -105,7 +105,7 @@ fig.tight_layout()
 
 
 
-# In[72]:
+# In[10]:
 
 
 def simulate_fault(system,duration,X_fault=1e-4,N_steps=500):
@@ -135,7 +135,7 @@ smib.run([{'t_end':20}])
 smib.post();
 
 
-# In[73]:
+# In[11]:
 
 
 # plotting the results with matplolib:
@@ -159,7 +159,7 @@ for ax in axes:
 fig.tight_layout()
 
 
-# In[69]:
+# In[12]:
 
 
 # plotting the results with matplolib:
@@ -176,13 +176,13 @@ axes.legend()
 fig.tight_layout()
 
 
-# In[113]:
+# In[13]:
 
 
 smib.decimation
 
 
-# In[124]:
+# In[14]:
 
 
 smib.struct[0]['iters'][smib.struct[0]['it']]

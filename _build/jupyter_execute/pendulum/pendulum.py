@@ -89,7 +89,7 @@ axes.grid()
 axes.set_ylabel('$\\theta (º)$')
 
 
-# In[28]:
+# In[10]:
 
 
 times = p.T
@@ -120,7 +120,7 @@ HTML(f'''<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"
 </svg>''')
 
 
-# In[32]:
+# In[11]:
 
 
 times = p.T
@@ -202,7 +202,7 @@ HTML(f'''
 
 # ### Animation
 
-# In[10]:
+# In[12]:
 
 
 M_list = [10,10,85]

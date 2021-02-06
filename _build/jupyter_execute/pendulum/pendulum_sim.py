@@ -14,7 +14,7 @@ get_ipython().run_line_magic('config', "InlineBackend.figure_format = 'svg'")
 plt.ion()
 
 
-# In[257]:
+# In[2]:
 
 
 from IPython.lib.display import YouTubeVideo
@@ -23,7 +23,7 @@ YouTubeVideo('4a0FbQdH3dY')
 
 # Before simulating we need to import the class from the build module:
 
-# In[258]:
+# In[3]:
 
 
 from pydae import ssa
@@ -32,7 +32,7 @@ from pendulum import pendulum_class
 
 # Then you can create an instance of the class:
 
-# In[259]:
+# In[4]:
 
 
 pend = pendulum_class()
@@ -43,7 +43,7 @@ pend = pendulum_class()
 # The `initialize` method gives the steady state of the system by solving first the backward and then the forward problems.
 # In this case 
 
-# In[260]:
+# In[5]:
 
 
 M = 30.0  # mass of the bob (kg)
@@ -57,7 +57,7 @@ pend.initialize([{
 
 # Once the system is initialized we can show the obtained variable values:
 
-# In[261]:
+# In[6]:
 
 
 pend.report_x()  # obtained dynamic states
@@ -73,7 +73,7 @@ pend.report_params()  # considered parameters
 # T = 2\pi \sqrt{\frac{L}{G}}
 # $$
 
-# In[262]:
+# In[7]:
 
 
 G = pend.get_value('G')
@@ -92,7 +92,7 @@ print(f'Oscillation period with formula: T = {T:0.2f} s')
 # \Delta \mathbf{\dot {x}} = \mathbf{A}\Delta \mathbf{x}  
 # $$
 
-# In[263]:
+# In[8]:
 
 
 ssa.eval_A(pend)              # method to linealized the system and to compute matrix A
@@ -102,7 +102,7 @@ eig_df
 
 # Using mode analysis the period of the pendulum can be computes choosing the third mode **Mode 1**:
 
-# In[264]:
+# In[9]:
 
 
 freq = eig_df['Freq.']['Mode 1']   # frequency of Mode 3 (Hz)
@@ -115,7 +115,7 @@ print(f'Oscillation period from small signal analysis: T = {period:0.2f} s')
 # A time simulation can be performed using the method `simulate`:
 # 
 
-# In[265]:
+# In[10]:
 
 
 pend.simulate([{'t_end':1, 'theta':np.deg2rad(-5)},  # initilize the system with theta = -5º and run until t=1s
@@ -124,7 +124,7 @@ pend.simulate([{'t_end':1, 'theta':np.deg2rad(-5)},  # initilize the system with
                                                      # steady state 
 
 
-# In[266]:
+# In[11]:
 
 
 time = pend.T[:,0]                            # gets the simulated times
@@ -157,20 +157,37 @@ print(f'Oscillation period from simulation: T = {period_sim:0.2f} s')
 # 
 # The obtained results can be animated. 
 
-# In[286]:
+# In[12]:
 
 
+from importlib import reload  
+reload(svgt)
 anim = svgt.animatesvg('../svg/pendulum_1_fx.svg','pendulum')
 anim.set_size(600,400)
+
+# start button:
+anim.begin_click = True
+anim.group_id = 'play'
+anim.anim_id = 'play_1'
+anim.translate(np.array([0.,3.]),np.array([0.0,0.0]),np.array([0.0,0.0]))
+
+# pendulum:
+anim.group_id = 'pendulum'
+anim.begin_click = False
+anim.anim_id = ''
+anim.begin = 'play_1.begin'
+
 times = pend.T[:,0]
 anim.rotate(times,-np.rad2deg(pend.get_values('theta')),73.327,31.538)
 
+# force:
 x = pend.get_values('p_x')*10
 y = -10*(5.21+pend.get_values('p_y'))
 
 f_x = -pend.get_values('f_x')*0.05
 
 anim.group_id = 'f_x_pos'
+anim.begin = 'play_1.begin'
 s_x = -np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
@@ -178,6 +195,7 @@ anim.scale(pend.T[:,0],72.019669,83.537544,s_x,s_y)
 anim.translate(pend.T[:,0],x,y)
 
 anim.group_id = 'f_x_neg'
+anim.begin = 'play_1.begin'
 s_x = np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
@@ -193,7 +211,7 @@ HTML('pendulum_5deg.svg')
 # - `p_5`: system for initial position of 5º
 # - `p_10`: system for initial position of 10º
 
-# In[287]:
+# In[13]:
 
 
 p_5  = pendulum_class()
@@ -210,31 +228,27 @@ p_10.simulate([{'t_end':1, 'theta':np.deg2rad(-10)},
             {'t_end':50,'f_x':0}],'prev');
 
 
-# In[288]:
-
-
-p_5  = pendulum_class()
-p_10 = pendulum_class()
-M = 30.0
-L = 5.21
-
-p_5.initialize([{'f_x':0,'M':M,'L':L,'theta':np.deg2rad(0)}],-1)
-p_5.simulate([{'t_end':1, 'theta':np.deg2rad(-5)},
-            {'t_end':50,'f_x':0}],'prev');
-
-p_10.initialize([{'f_x':0,'M':M,'L':L,'theta':np.deg2rad(0)}],-1)
-p_10.simulate([{'t_end':1, 'theta':np.deg2rad(-10)},
-            {'t_end':50,'f_x':0}],'prev');
-
-
-# In[289]:
+# In[14]:
 
 
 anim = svgt.animatesvg('../svg/pendulum_2.svg','pendulum_1')
 anim.set_size(600,400)
-anim.rotate(p_5.T[:,0],np.rad2deg(p_5.get_values('theta')),73.327,31.538)
+
+# start button:
+anim.begin_click = True
+anim.group_id = 'play'
+anim.anim_id = 'play_anim_2'
+anim.scale(np.array([0,1.0]),np.array([1.,1.]),np.array([1.,1.]),np.array([1.,1.]),np.array([1.,1.0]))
+anim.anim_id = ''
+
+# pendulums:
+anim.group_id = 'pendulum_1'
+anim.begin_click = False
+anim.begin = 'play_anim_2.begin'
+
+anim.rotate(p_5.T[:,0],-np.rad2deg(p_5.get_values('theta')),73.327,31.538)
 anim.group_id = 'pendulum_2'
-anim.rotate(p_10.T[:,0],np.rad2deg(p_10.get_values('theta')),73.327,31.538)
+anim.rotate(p_10.T[:,0],-np.rad2deg(p_10.get_values('theta')),73.327,31.538)
 
 anim.save('pendulum_5deg_10deg.svg')
 HTML('pendulum_5deg_10deg.svg')
@@ -242,7 +256,7 @@ HTML('pendulum_5deg_10deg.svg')
 
 # Now we can check that mass does not affect the oscillation period:
 
-# In[290]:
+# In[15]:
 
 
 p_m30 = pendulum_class()
@@ -259,7 +273,7 @@ eig_df_m30 = ssa.damp_report(p_m30)
 eig_df_m105 = ssa.damp_report(p_m105)
 
 
-# In[291]:
+# In[16]:
 
 
 freq_m30 = eig_df_m30['Freq.']['Mode 1']   # frequency of Mode 1 (Hz)
@@ -269,52 +283,76 @@ print(f'Oscillation period from small signal analysis with M = 30 kg:  T = {1/fr
 print(f'Oscillation period from small signal analysis with M = 105 kg: T = {1/freq_m105:0.2f} s')
 
 
-# In[292]:
+# In[17]:
 
 
-pend.simulate([{'t_end':1, 'theta':np.deg2rad(-10)},  # initilize the system with theta = -5º and run until t=1s
+pend_push =  pendulum_class()
+pend_push.initialize([{'f_x':0,'M':30,'L':L,'theta':np.deg2rad(-10)}],-1)
+
+pend_push.simulate([{'t_end':1, 'theta':np.deg2rad(-10)},  # initilize the system with theta = -5º and run until t=1s
                {'t_end':1.5,'f_x':20.0},               # release the pendulum by but applying a positive force equal
                {'t_end':10,'f_x':0.0}],                # release the pendulum
                'prev');                              
 
 
-# In[293]:
+# In[18]:
 
 
+from importlib import reload  
+reload(svgt)
 anim = svgt.animatesvg('../svg/pendulum_1_fx.svg','pendulum')
 anim.set_size(600,400)
-times = pend.T[:,0]
-anim.rotate(times,-np.rad2deg(pend.get_values('theta')),73.327,31.538)
 
-x = pend.get_values('p_x')*10
-y = -10*(5.21+pend.get_values('p_y'))
+# start button:
+anim.begin_click = True
+anim.group_id = 'play'
+anim.anim_id = 'play_anim_3'
+anim.translate(np.array([0.,3.]),np.array([0.0,0.1]),np.array([0.0,0.1]))
+anim.anim_id = ''
 
-f_x = -pend.get_values('f_x')*0.05
+# pendulum:
+anim.group_id = 'pendulum'
+anim.begin_click = False
+anim.anim_id = 'pendulum_anim'
+anim.begin = 'play_anim_3.begin'
+
+times = pend_push.T[:,0]
+anim.rotate(times,-np.rad2deg(pend_push.get_values('theta')),73.327,31.538)
+
+# force:
+x = pend_push.get_values('p_x')*10
+y = -10*(5.21+pend_push.get_values('p_y'))
+
+f_x = -pend_push.get_values('f_x')*0.05
 
 anim.group_id = 'f_x_pos'
+anim.begin = 'play_anim_3.begin'
+#anim.begin = 'click'
 s_x = -np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(pend.T[:,0],72.019669,83.537544,s_x,s_y)
-anim.translate(pend.T[:,0],x,y)
+anim.scale(pend_push.T[:,0],72.019669,83.537544,s_x,s_y)
+anim.translate(pend_push.T[:,0],x,y)
 
 anim.group_id = 'f_x_neg'
+anim.begin = 'play_anim_3.begin'
+#anim.begin = 'click'
 s_x = np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(pend.T[:,0],74.635086,83.537544,s_x,s_y)
-anim.translate(pend.T[:,0],x,y)
+anim.scale(pend_push.T[:,0],74.635086,83.537544,s_x,s_y)
+anim.translate(pend_push.T[:,0],x,y)
 
+anim.save('pendulum_10deg_push.svg')
 
-anim.save('pendulum_10deg_fx.svg')
-HTML('pendulum_10deg_fx.svg')
+HTML('pendulum_10deg_push.svg')
 
 
 # ### Control
 
 # #### Simulation for control testing
 
-# In[294]:
+# In[19]:
 
 
 Δt = 0.1
@@ -332,7 +370,7 @@ for t in times:
 p_ctrl.post();
 
 
-# In[295]:
+# In[20]:
 
 
 # plotting the results with matplolib:
@@ -369,7 +407,7 @@ fig.tight_layout()
 # 
 # where $f_x$ is the hand effort and $\Delta f_x$ is the controller force increment.
 
-# In[296]:
+# In[21]:
 
 
 Δt = 0.1
@@ -393,39 +431,7 @@ for t in times:
 p_ctrl.post();  # required post processing
 
 
-# In[297]:
-
-
-anim = svgt.animatesvg('../svg/pendulum_1_fx.svg','pendulum')
-anim.set_size(600,400)
-times = p_ctrl.T[:,0]
-anim.rotate(times,-np.rad2deg(p_ctrl.get_values('theta')),73.327,31.538)
-
-x = p_ctrl.get_values('p_x')*10
-y = -10*(5.21+p_ctrl.get_values('p_y'))
-
-f_x = -p_ctrl.get_values('f_x')*0.05
-
-anim.group_id = 'f_x_pos'
-s_x = -np.copy(f_x)
-s_x[s_x<0] = 0.0
-s_y = s_x
-anim.scale(p_ctrl.T[:,0],72.019669,83.537544,s_x,s_y)
-anim.translate(p_ctrl.T[:,0],x,y)
-
-anim.group_id = 'f_x_neg'
-s_x = np.copy(f_x)
-s_x[s_x<0] = 0.0
-s_y = s_x
-anim.scale(p_ctrl.T[:,0],74.635086,83.537544,s_x,s_y)
-anim.translate(p_ctrl.T[:,0],x,y)
-
-
-anim.save('pendulum_ctrl.svg')
-HTML('pendulum_ctrl.svg')
-
-
-# In[298]:
+# In[22]:
 
 
 # plotting the results with matplolib:
@@ -448,9 +454,58 @@ axes[1].set_xlabel('Time (s)')
 fig.tight_layout()
 
 
+# In[23]:
+
+
+anim = svgt.animatesvg('../svg/pendulum_1_fx.svg','pendulum')
+anim.set_size(600,400)
+
+# start button:
+anim.begin_click = True
+anim.group_id = 'play'
+anim.anim_id = 'play_anim_4'
+anim.scale(np.array([0,10000.0]),np.array([1.,1.])*1.715,np.array([1.,1.])*1.847,np.array([1.,1.]),np.array([1,1]))
+anim.anim_id = ''
+
+# pendulum:
+anim.group_id = 'pendulum'
+anim.anim_id = 'pendulum_anim'
+anim.begin_click = False
+anim.begin = 'play_anim_4.begin'
+times = p_ctrl.T[:,0]
+anim.rotate(times,-np.rad2deg(p_ctrl.get_values('theta')),73.327,31.538)
+
+x = p_ctrl.get_values('p_x')*10
+y = -10*(5.21+p_ctrl.get_values('p_y'))
+
+f_x = -p_ctrl.get_values('f_x')*0.05
+
+anim.group_id = 'f_x_pos'
+anim.anim_id = 'f_x_pos_anim'
+anim.begin = 'play_anim_4.begin'
+s_x = -np.copy(f_x)
+s_x[s_x<0] = 0.0
+s_y = s_x
+anim.scale(p_ctrl.T[:,0],72.019669,83.537544,s_x,s_y)
+anim.translate(p_ctrl.T[:,0],x,y)
+
+anim.group_id = 'f_x_neg'
+anim.anim_id = 'f_x_neg_anim'
+anim.begin = 'play_anim_4.begin'
+s_x = np.copy(f_x)
+s_x[s_x<0] = 0.0
+s_y = s_x
+anim.scale(p_ctrl.T[:,0],74.635086,83.537544,s_x,s_y)
+anim.translate(p_ctrl.T[:,0],x,y)
+
+
+anim.save('pendulum_ctrl.svg')
+HTML('pendulum_ctrl.svg')
+
+
 # #### On-off control
 
-# In[253]:
+# In[24]:
 
 
 Δt = 0.1
@@ -475,39 +530,7 @@ for t in times:
 p_ctrl.post();  # required post processing
 
 
-# In[277]:
-
-
-anim = svgt.animatesvg('../svg/pendulum_1_fx.svg','pendulum')
-anim.set_size(600,400)
-times = p_ctrl.T[:,0]
-anim.rotate(times,-np.rad2deg(p_ctrl.get_values('theta')),73.327,31.538)
-
-x = p_ctrl.get_values('p_x')*10
-y = -10*(5.21+p_ctrl.get_values('p_y'))
-
-f_x = -p_ctrl.get_values('f_x')*0.05
-
-anim.group_id = 'f_x_pos'
-s_x = -np.copy(f_x)
-s_x[s_x<0] = 0.0
-s_y = s_x
-anim.scale(p_ctrl.T[:,0],72.019669,83.537544,s_x,s_y+0.2)
-anim.translate(p_ctrl.T[:,0],x,y)
-
-anim.group_id = 'f_x_neg'
-s_x = np.copy(f_x)
-s_x[s_x<0] = 0.0
-s_y = s_x
-anim.scale(p_ctrl.T[:,0],74.635086,83.537544,s_x,s_y+0.2)
-anim.translate(p_ctrl.T[:,0],x,y)
-
-
-anim.save('pendulum_ctrl.svg')
-HTML('pendulum_ctrl.svg')
-
-
-# In[54]:
+# In[25]:
 
 
 # plotting the results with matplolib:
@@ -524,7 +547,57 @@ axes[1].legend()
 axes[0].set_ylabel('Angle $\\theta\; (º)$')
 axes[1].set_ylabel('Force (N)')
 axes[1].set_xlabel('Time (s)')
+
 fig.tight_layout()
+
+
+# In[26]:
+
+
+anim = svgt.animatesvg('../svg/pendulum_1_fx.svg','pendulum')
+anim.set_size(600,400)
+
+# start button:
+anim.begin_click = True
+anim.group_id = 'play'
+anim.anim_id = 'play_anim_5'
+anim.scale(np.array([0,10000.0]),np.array([1.,1.])*1.715,np.array([1.,1.])*1.847,np.array([1.,1.]),np.array([1,1]))
+anim.anim_id = ''
+
+# pendulum:
+anim.group_id = 'pendulum'
+anim.anim_id = 'pendulum_anim'
+anim.begin_click = False
+anim.begin = 'play_anim_5.begin'
+times = p_ctrl.T[:,0]
+anim.rotate(times,-np.rad2deg(p_ctrl.get_values('theta')),73.327,31.538)
+
+x = p_ctrl.get_values('p_x')*10
+y = -10*(5.21+p_ctrl.get_values('p_y'))
+
+f_x = -p_ctrl.get_values('f_x')*0.05
+
+anim.group_id = 'f_x_pos'
+anim.anim_id = 'f_x_pos_anim'
+anim.begin = 'play_anim_5.begin'
+s_x = -np.copy(f_x)
+s_x[s_x<0] = 0.0
+s_y = s_x
+anim.scale(p_ctrl.T[:,0],72.019669,83.537544,s_x,s_y)
+anim.translate(p_ctrl.T[:,0],x,y)
+
+anim.group_id = 'f_x_neg'
+anim.anim_id = 'f_x_neg_anim'
+anim.begin = 'play_anim_5.begin'
+s_x = np.copy(f_x)
+s_x[s_x<0] = 0.0
+s_y = s_x
+anim.scale(p_ctrl.T[:,0],74.635086,83.537544,s_x,s_y)
+anim.translate(p_ctrl.T[:,0],x,y)
+
+
+anim.save('pendulum_ctrl_on_off.svg')
+HTML('pendulum_ctrl_on_off.svg')
 
 
 # In[ ]:

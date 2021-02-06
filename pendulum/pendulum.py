@@ -191,12 +191,8 @@ class pendulum_class:
     def ini_problem(self,x):
         self.struct[0].x[:,0] = x[0:self.N_x]
         self.struct[0].y_ini[:,0] = x[self.N_x:(self.N_x+self.N_y)]
-        if self.compile:
-            ini(self.struct,2)
-            ini(self.struct,3)       
-        else:
-            ini.py_func(self.struct,2)
-            ini.py_func(self.struct,3)                   
+        ini(self.struct,2)
+        ini(self.struct,3)       
         fg = np.vstack((self.struct[0].f,self.struct[0].g))[:,0]
         return fg
 
@@ -204,21 +200,12 @@ class pendulum_class:
         t = self.struct[0].t
         self.struct[0].x[:,0] = x[0:self.N_x]
         self.struct[0].y_run[:,0] = x[self.N_x:(self.N_x+self.N_y)]
-        
-        if self.compile:
-            run(t,self.struct,2)
-            run(t,self.struct,3)
-            run(t,self.struct,10)
-            run(t,self.struct,11)
-            run(t,self.struct,12)
-            run(t,self.struct,13)
-        else:
-            run.py_func(t,self.struct,2)
-            run.py_func(t,self.struct,3)
-            run.py_func(t,self.struct,10)
-            run.py_func(t,self.struct,11)
-            run.py_func(t,self.struct,12)
-            run.py_func(t,self.struct,13)            
+        run(t,self.struct,2)
+        run(t,self.struct,3)
+        run(t,self.struct,10)
+        run(t,self.struct,11)
+        run(t,self.struct,12)
+        run(t,self.struct,13)
         
         fg = np.vstack((self.struct[0].f,self.struct[0].g))[:,0]
         return fg
@@ -257,12 +244,8 @@ class pendulum_class:
     def ini_dae_jacobian(self,x):
         self.struct[0].x[:,0] = x[0:self.N_x]
         self.struct[0].y_ini[:,0] = x[self.N_x:(self.N_x+self.N_y)]
-        if self.compile:
-            ini(self.struct,10)
-            ini(self.struct,11) 
-        else:
-            ini.py_func(self.struct,10)
-            ini.py_func(self.struct,11)             
+        ini(self.struct,10)
+        ini(self.struct,11)       
         A_c = np.block([[self.struct[0].Fx_ini,self.struct[0].Fy_ini],
                         [self.struct[0].Gx_ini,self.struct[0].Gy_ini]])
         return A_c
@@ -410,7 +393,7 @@ class pendulum_class:
                 self.xy_prev[self.y_ini_list.index(item)+self.N_x] = xy_0_dict[item]
                 
             
-    def initialize(self,events=[{}],xy0=0,compile=True):
+    def initialize(self,events=[{}],xy0=0):
         '''
         
 
@@ -436,9 +419,6 @@ class pendulum_class:
             DESCRIPTION.
 
         '''
-        
-        self.compile = compile
-        
         # simulation parameters
         self.struct[0].it = 0       # set time step to zero
         self.struct[0].it_store = 0 # set storage to zero
@@ -517,28 +497,16 @@ class pendulum_class:
             else:
                 sol = sopt.root(self.run_problem, xy0, method=self.sopt_root_method)
 
-            if self.compile:
-                # evaluate f and g
-                run(0.0,self.struct,2)
-                run(0.0,self.struct,3)                
-    
-                # evaluate run jacobians 
-                run(0.0,self.struct,10)
-                run(0.0,self.struct,11)                
-                run(0.0,self.struct,12) 
-                run(0.0,self.struct,14) 
-                
-            else:
-                # evaluate f and g
-                run.py_func(0.0,self.struct,2)
-                run.py_func(0.0,self.struct,3)                
-    
-                # evaluate run jacobians 
-                run.py_func(0.0,self.struct,10)
-                run.py_func(0.0,self.struct,11)                
-                run.py_func(0.0,self.struct,12) 
-                run.py_func(0.0,self.struct,14)                 
-                
+            # evaluate f and g
+            run(0.0,self.struct,2)
+            run(0.0,self.struct,3)                
+
+            
+            # evaluate run jacobians 
+            run(0.0,self.struct,10)
+            run(0.0,self.struct,11)                
+            run(0.0,self.struct,12) 
+            run(0.0,self.struct,14) 
              
             # post process result    
             T = self.struct[0]['T'][:self.struct[0].it_store]
