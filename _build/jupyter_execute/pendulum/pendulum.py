@@ -24,13 +24,13 @@ from IPython.core.display import HTML
 
 
 from pydae import ssa
-from pendulum import pendulum_class
+import pendulum
 
 
 # In[4]:
 
 
-p = pendulum_class()
+p = pendulum.model()
 
 
 # In[5]:
@@ -38,7 +38,7 @@ p = pendulum_class()
 
 M = 30.0
 L = 5.21
-p.initialize([{'f_x':0,'M':M,'L':L,'theta':np.deg2rad(0)}],-1)
+p.ini({'f_x':0,'M':M,'L':L,'theta':np.deg2rad(0)},-1)
 p.report_x()
 p.report_u()
 
@@ -46,9 +46,9 @@ p.report_u()
 # In[6]:
 
 
-ssa.eval_A(p)
+ssa.A_eval(p)
 eig_df=ssa.damp_report(p)
-eig_df
+eig_df.round(3)
 
 
 # In[7]:
@@ -62,14 +62,16 @@ print(f'Oscillation period from small signal analysis: T = {period:0.2f} s')
 # In[8]:
 
 
-p.simulate([{'t_end':1, 'theta':np.deg2rad(-5)},
-            {'t_end':50,'f_x':0}],'prev');
+p.ini({'f_x':0,'M':M,'L':L,'theta':np.deg2rad(-5)},-1)
+p.run( 1.0, {})
+p.run(50.0, {'f_x':0}) 
+p.post();
 
 
 # In[9]:
 
 
-time = p.T[:,0]
+time = p.Time
 theta = np.rad2deg(p.get_values('theta'))
 
 idx_1 = np.where(theta==np.max(theta[(time>7)&(time<11)]))[0][0]
@@ -84,7 +86,7 @@ print(f'Oscillation period from simulation: T = {period_sim:0.2f} s')
 plt.close('all')
 fig, axes = plt.subplots(nrows=1,ncols=1, figsize=(5, 3), dpi=100)
 
-axes.plot(p.T, np.rad2deg(p.get_values('theta')), label=f'$\theta$')
+axes.plot(p.Time, np.rad2deg(p.get_values('theta')), label=f'$\theta$')
 axes.grid()
 axes.set_ylabel('$\\theta (º)$')
 
@@ -92,8 +94,8 @@ axes.set_ylabel('$\\theta (º)$')
 # In[10]:
 
 
-times = p.T
-t_end = times[-1,0] 
+times = p.Time
+t_end = times[-1] 
 pos = p.get_values('theta')
 keyTimes = ""
 keyPoints = ""
@@ -120,7 +122,7 @@ HTML(f'''<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"
 </svg>''')
 
 
-# In[11]:
+# In[32]:
 
 
 times = p.T
@@ -202,7 +204,7 @@ HTML(f'''
 
 # ### Animation
 
-# In[12]:
+# In[10]:
 
 
 M_list = [10,10,85]

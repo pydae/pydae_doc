@@ -27,7 +27,7 @@ YouTubeVideo('4a0FbQdH3dY')
 
 
 from pydae import ssa
-from pendulum import pendulum_class
+import pendulum
 
 
 # Then you can create an instance of the class:
@@ -35,7 +35,7 @@ from pendulum import pendulum_class
 # In[4]:
 
 
-pend = pendulum_class()
+pend = pendulum.model()
 
 
 # ### Initialization
@@ -48,11 +48,10 @@ pend = pendulum_class()
 
 M = 30.0  # mass of the bob (kg)
 L = 5.21  # length of the pendulum (m)
-pend.initialize([{
-                 'M':M,'L':L,           # parameters setting
-                 'theta':np.deg2rad(0)  # initial desired angle = 0º
-                }],-1)                  # here -1 means that -1 is considered as initial gess for
-                                        # dynamic and algebraic states
+pend.ini({'M':M,'L':L,           # parameters setting
+          'theta':np.deg2rad(0)  # initial desired angle = 0º
+          },-1)                  # here -1 means that -1 is considered as initial gess for
+                                 # dynamic and algebraic states
 
 
 # Once the system is initialized we can show the obtained variable values:
@@ -95,7 +94,7 @@ print(f'Oscillation period with formula: T = {T:0.2f} s')
 # In[8]:
 
 
-ssa.eval_A(pend)              # method to linealized the system and to compute matrix A
+ssa.A_eval(pend)              # method to linealized the system and to compute matrix A
 eig_df=ssa.damp_report(pend)  # method to create a pandas.DataFrame after computing eigenvalues for A
 eig_df
 
@@ -118,16 +117,16 @@ print(f'Oscillation period from small signal analysis: T = {period:0.2f} s')
 # In[10]:
 
 
-pend.simulate([{'t_end':1, 'theta':np.deg2rad(-5)},  # initilize the system with theta = -5º and run until t=1s
-               {'t_end':50,'f_x':0.0}],              # release the pendulum by making the f_x force equal zero 
-               'prev');                              # here the initialization is using the previous computed
-                                                     # steady state 
+pend.ini({'f_x':0,'M':M,'L':L,'theta':np.deg2rad(-5)},-1) # initilize the system with theta = -5º 
+pend.run( 1.0, {})         # run until t=1s
+pend.run(50.0, {'f_x':0})  # release the pendulum by making the f_x force equal zero  
+pend.post();               # close the simulation 
 
 
 # In[11]:
 
 
-time = pend.T[:,0]                            # gets the simulated times
+time = pend.Time                              # gets the simulated times
 theta = np.rad2deg(pend.get_values('theta'))  # gets the values for theta (and covert them from rad to deg)
 
 # this is just to find the period of the theta oscillation:
@@ -142,7 +141,7 @@ period_sim = t_2 - t_1
 plt.close('all')
 fig, axes = plt.subplots(nrows=1,ncols=1, figsize=(6, 3), dpi=100)
 
-axes.plot(pend.T, np.rad2deg(pend.get_values('theta')), label=f'$\theta$')
+axes.plot(pend.Time, np.rad2deg(pend.get_values('theta')), label=f'$\theta$')
 axes.plot(t_1, np.rad2deg(pend.get_values('theta')[idx_1]),'o',ms=4)
 axes.plot(t_2, np.rad2deg(pend.get_values('theta')[idx_2]),'o',ms=4)
 axes.grid()
@@ -177,7 +176,7 @@ anim.begin_click = False
 anim.anim_id = ''
 anim.begin = 'play_1.begin'
 
-times = pend.T[:,0]
+times = pend.Time
 anim.rotate(times,-np.rad2deg(pend.get_values('theta')),73.327,31.538)
 
 # force:
@@ -191,16 +190,16 @@ anim.begin = 'play_1.begin'
 s_x = -np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(pend.T[:,0],72.019669,83.537544,s_x,s_y)
-anim.translate(pend.T[:,0],x,y)
+anim.scale(pend.Time,72.019669,83.537544,s_x,s_y)
+anim.translate(pend.Time,x,y)
 
 anim.group_id = 'f_x_neg'
 anim.begin = 'play_1.begin'
 s_x = np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(pend.T[:,0],74.635086,83.537544,s_x,s_y)
-anim.translate(pend.T[:,0],x,y)
+anim.scale(pend.Time,74.635086,83.537544,s_x,s_y)
+anim.translate(pend.Time,x,y)
 
 anim.save('pendulum_5deg.svg')
 HTML('pendulum_5deg.svg')
@@ -214,18 +213,20 @@ HTML('pendulum_5deg.svg')
 # In[13]:
 
 
-p_5  = pendulum_class()
-p_10 = pendulum_class()
+p_5  = pendulum.model()
+p_10 = pendulum.model()
 M = 30.0
 L = 5.21
 
-p_5.initialize([{'f_x':0,'M':M,'L':L,'theta':np.deg2rad(0)}],-1)
-p_5.simulate([{'t_end':1, 'theta':np.deg2rad(-5)},
-            {'t_end':50,'f_x':0}],'prev');
+p_5.ini({'f_x':0,'M':M,'L':L,'theta':np.deg2rad(-5)},-1)
+p_5.run( 1.0, {})
+p_5.run(50.0, {'f_x':0})
+p_5.post()
 
-p_10.initialize([{'f_x':0,'M':M,'L':L,'theta':np.deg2rad(0)}],-1)
-p_10.simulate([{'t_end':1, 'theta':np.deg2rad(-10)},
-            {'t_end':50,'f_x':0}],'prev');
+p_10.ini({'f_x':0,'M':M,'L':L,'theta':np.deg2rad(-10)},-1)
+p_10.run( 1.0, {})
+p_10.run(50.0, {'f_x':0})
+p_10.post()
 
 
 # In[14]:
@@ -246,9 +247,9 @@ anim.group_id = 'pendulum_1'
 anim.begin_click = False
 anim.begin = 'play_anim_2.begin'
 
-anim.rotate(p_5.T[:,0],-np.rad2deg(p_5.get_values('theta')),73.327,31.538)
+anim.rotate(p_5.Time,-np.rad2deg(p_5.get_values('theta')),73.327,31.538)
 anim.group_id = 'pendulum_2'
-anim.rotate(p_10.T[:,0],-np.rad2deg(p_10.get_values('theta')),73.327,31.538)
+anim.rotate(p_10.Time,-np.rad2deg(p_10.get_values('theta')),73.327,31.538)
 
 anim.save('pendulum_5deg_10deg.svg')
 HTML('pendulum_5deg_10deg.svg')
@@ -259,15 +260,15 @@ HTML('pendulum_5deg_10deg.svg')
 # In[15]:
 
 
-p_m30 = pendulum_class()
-p_m105 = pendulum_class()
+p_m30 = pendulum.model()
+p_m105 = pendulum.model()
 
-p_m30.initialize([{'f_x':0,'M':30,'L':L,'theta':np.deg2rad(0)}],-1)
-p_m105.initialize([{'f_x':0,'M':30+75,'L':L,'theta':np.deg2rad(0)}],-0.1)
+p_m30.ini({'f_x':0,'M':30,'L':L,'theta':np.deg2rad(0)},-1)
+p_m105.ini({'f_x':0,'M':30+75,'L':L,'theta':np.deg2rad(0)},-0.1)
 p_m105.report_x()
 p_m105.report_y()
-ssa.eval_ss(p_m30)
-ssa.eval_ss(p_m105)
+ssa.A_eval(p_m30)
+ssa.A_eval(p_m105)
 
 eig_df_m30 = ssa.damp_report(p_m30)
 eig_df_m105 = ssa.damp_report(p_m105)
@@ -286,13 +287,13 @@ print(f'Oscillation period from small signal analysis with M = 105 kg: T = {1/fr
 # In[17]:
 
 
-pend_push =  pendulum_class()
-pend_push.initialize([{'f_x':0,'M':30,'L':L,'theta':np.deg2rad(-10)}],-1)
+pend_push =  pendulum.model()
+pend_push.ini({'f_x':0,'M':30,'L':L,'theta':np.deg2rad(-10)},-1)
 
-pend_push.simulate([{'t_end':1, 'theta':np.deg2rad(-10)},  # initilize the system with theta = -5º and run until t=1s
-               {'t_end':1.5,'f_x':20.0},               # release the pendulum by but applying a positive force equal
-               {'t_end':10,'f_x':0.0}],                # release the pendulum
-               'prev');                              
+pend_push.run( 1.0,{'theta':np.deg2rad(-10)})  # initilize the system with theta = -5º and run until t=1s
+pend_push.run( 1.5,{'f_x':20.0})               # release the pendulum by but applying a positive force equal
+pend_push.run(10.0,{'f_x': 0.0})               # release the pendulum
+pend_push.post();                        
 
 
 # In[18]:
@@ -316,7 +317,7 @@ anim.begin_click = False
 anim.anim_id = 'pendulum_anim'
 anim.begin = 'play_anim_3.begin'
 
-times = pend_push.T[:,0]
+times = pend_push.Time
 anim.rotate(times,-np.rad2deg(pend_push.get_values('theta')),73.327,31.538)
 
 # force:
@@ -331,8 +332,8 @@ anim.begin = 'play_anim_3.begin'
 s_x = -np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(pend_push.T[:,0],72.019669,83.537544,s_x,s_y)
-anim.translate(pend_push.T[:,0],x,y)
+anim.scale(pend_push.Time,72.019669,83.537544,s_x,s_y)
+anim.translate(pend_push.Time,x,y)
 
 anim.group_id = 'f_x_neg'
 anim.begin = 'play_anim_3.begin'
@@ -340,8 +341,8 @@ anim.begin = 'play_anim_3.begin'
 s_x = np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(pend_push.T[:,0],74.635086,83.537544,s_x,s_y)
-anim.translate(pend_push.T[:,0],x,y)
+anim.scale(pend_push.Time,74.635086,83.537544,s_x,s_y)
+anim.translate(pend_push.Time,x,y)
 
 anim.save('pendulum_10deg_push.svg')
 
@@ -356,16 +357,16 @@ HTML('pendulum_10deg_push.svg')
 
 
 Δt = 0.1
-p_ctrl = pendulum_class()
+p_ctrl = pendulum.model()
 times = np.arange(0,30,Δt)
-p_ctrl.initialize([{'M':30,'L':5.21,'theta':np.deg2rad(-10)}],-1)
+p_ctrl.ini({'M':30,'L':5.21,'theta':np.deg2rad(-10)},-1)
 
 f_x_0 = p_ctrl.get_value('f_x')
 for t in times:
     f_x = f_x_0
     if t>2.0:
         f_x = 0.0
-    p_ctrl.run([{'t_end':t,'f_x':f_x}])
+    p_ctrl.run(t,{'f_x':f_x})
     
 p_ctrl.post();
 
@@ -377,12 +378,12 @@ p_ctrl.post();
 plt.close('all')
 fig, axes = plt.subplots(nrows=2,ncols=1, figsize=(6, 5), dpi=100)
 
-axes[0].plot(p_ctrl.T, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
+axes[0].plot(p_ctrl.Time, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
 E_k = p_ctrl.get_values('E_k')
 E_p = p_ctrl.get_values('E_p')
-axes[1].plot(p_ctrl.T, E_k, label=f'$E_k$')
-axes[1].plot(p_ctrl.T, E_p, label=f'$E_p$')
-axes[1].plot(p_ctrl.T, E_k+E_p, label=f'$E$')
+axes[1].plot(p_ctrl.Time, E_k, label=f'$E_k$')
+axes[1].plot(p_ctrl.Time, E_p, label=f'$E_p$')
+axes[1].plot(p_ctrl.Time, E_k+E_p, label=f'$E$')
 
 axes[0].grid()
 axes[1].grid()
@@ -411,9 +412,9 @@ fig.tight_layout()
 
 
 Δt = 0.1
-p_ctrl = pendulum_class()
+p_ctrl = pendulum.model()
 times = np.arange(0,25,Δt)
-p_ctrl.initialize([{'M':30,'L':5.21,'theta':np.deg2rad(-10)}],-1)
+p_ctrl.ini({'M':30,'L':5.21,'theta':np.deg2rad(-10)},-1)
 
 K = 20.0
 f_x_0 = p_ctrl.get_value('f_x')
@@ -426,7 +427,7 @@ for t in times:
      
     f_x = f_x_hand - K*v_x            # control law
     
-    p_ctrl.run([{'t_end':t,'f_x':f_x}])  # simulation until t(k+1) =  Δt + t(k) with the updated f_x force 
+    p_ctrl.run(t,{'f_x':f_x})  # simulation until t(k+1) =  Δt + t(k) with the updated f_x force 
     
 p_ctrl.post();  # required post processing
 
@@ -438,12 +439,12 @@ p_ctrl.post();  # required post processing
 plt.close('all')
 fig, axes = plt.subplots(nrows=2,ncols=1, figsize=(6, 5), dpi=100)
 
-axes[0].plot(p_ctrl.T, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
+axes[0].plot(p_ctrl.Time, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
 E_k = p_ctrl.get_values('E_k')
 E_p = p_ctrl.get_values('E_p')
-axes[1].plot(p_ctrl.T, E_k, label=f'$E_k$')
-axes[1].plot(p_ctrl.T, E_p, label=f'$E_p$')
-axes[1].plot(p_ctrl.T, E_k+E_p, label=f'$E$')
+axes[1].plot(p_ctrl.Time, E_k, label=f'$E_k$')
+axes[1].plot(p_ctrl.Time, E_p, label=f'$E_p$')
+axes[1].plot(p_ctrl.Time, E_k+E_p, label=f'$E$')
 
 axes[0].grid()
 axes[1].grid()
@@ -472,7 +473,7 @@ anim.group_id = 'pendulum'
 anim.anim_id = 'pendulum_anim'
 anim.begin_click = False
 anim.begin = 'play_anim_4.begin'
-times = p_ctrl.T[:,0]
+times = p_ctrl.Time
 anim.rotate(times,-np.rad2deg(p_ctrl.get_values('theta')),73.327,31.538)
 
 x = p_ctrl.get_values('p_x')*10
@@ -486,8 +487,8 @@ anim.begin = 'play_anim_4.begin'
 s_x = -np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(p_ctrl.T[:,0],72.019669,83.537544,s_x,s_y)
-anim.translate(p_ctrl.T[:,0],x,y)
+anim.scale(p_ctrl.Time,72.019669,83.537544,s_x,s_y)
+anim.translate(p_ctrl.Time,x,y)
 
 anim.group_id = 'f_x_neg'
 anim.anim_id = 'f_x_neg_anim'
@@ -495,8 +496,8 @@ anim.begin = 'play_anim_4.begin'
 s_x = np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(p_ctrl.T[:,0],74.635086,83.537544,s_x,s_y)
-anim.translate(p_ctrl.T[:,0],x,y)
+anim.scale(p_ctrl.Time,74.635086,83.537544,s_x,s_y)
+anim.translate(p_ctrl.Time,x,y)
 
 
 anim.save('pendulum_ctrl.svg')
@@ -509,9 +510,9 @@ HTML('pendulum_ctrl.svg')
 
 
 Δt = 0.1
-p_ctrl = pendulum_class()
+p_ctrl = pendulum.model()
 times = np.arange(0,25,Δt)
-p_ctrl.initialize([{'M':30,'L':5.21,'theta':np.deg2rad(-10)}],-1)
+p_ctrl.ini({'M':30,'L':5.21,'theta':np.deg2rad(-10)},-1)
 
 K = 20.0
 f_x_0 = p_ctrl.get_value('f_x')
@@ -525,7 +526,7 @@ for t in times:
      
     f_x = f_x_hand - np.sign(v_x)*5            # control law
     
-    p_ctrl.run([{'t_end':t,'f_x':f_x}])  # simulation until t(k+1) =  Δt + t(k) with the updated f_x force 
+    p_ctrl.run(t,{'f_x':f_x})  # simulation until t(k+1) =  Δt + t(k) with the updated f_x force 
     
 p_ctrl.post();  # required post processing
 
@@ -537,8 +538,8 @@ p_ctrl.post();  # required post processing
 plt.close('all')
 fig, axes = plt.subplots(nrows=2,ncols=1, figsize=(6, 5), dpi=100)
 
-axes[0].plot(p_ctrl.T, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
-axes[1].plot(p_ctrl.T, p_ctrl.get_values('f_x'), label=f'$f_x$')
+axes[0].plot(p_ctrl.Time, np.rad2deg(p_ctrl.get_values('theta')), label=f'$\theta$')
+axes[1].plot(p_ctrl.Time, p_ctrl.get_values('f_x'), label=f'$f_x$')
 
 
 axes[0].grid()
@@ -569,7 +570,7 @@ anim.group_id = 'pendulum'
 anim.anim_id = 'pendulum_anim'
 anim.begin_click = False
 anim.begin = 'play_anim_5.begin'
-times = p_ctrl.T[:,0]
+times = p_ctrl.Time
 anim.rotate(times,-np.rad2deg(p_ctrl.get_values('theta')),73.327,31.538)
 
 x = p_ctrl.get_values('p_x')*10
@@ -583,8 +584,8 @@ anim.begin = 'play_anim_5.begin'
 s_x = -np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(p_ctrl.T[:,0],72.019669,83.537544,s_x,s_y)
-anim.translate(p_ctrl.T[:,0],x,y)
+anim.scale(p_ctrl.Time,72.019669,83.537544,s_x,s_y)
+anim.translate(p_ctrl.Time,x,y)
 
 anim.group_id = 'f_x_neg'
 anim.anim_id = 'f_x_neg_anim'
@@ -592,8 +593,8 @@ anim.begin = 'play_anim_5.begin'
 s_x = np.copy(f_x)
 s_x[s_x<0] = 0.0
 s_y = s_x
-anim.scale(p_ctrl.T[:,0],74.635086,83.537544,s_x,s_y)
-anim.translate(p_ctrl.T[:,0],x,y)
+anim.scale(p_ctrl.Time,74.635086,83.537544,s_x,s_y)
+anim.translate(p_ctrl.Time,x,y)
 
 
 anim.save('pendulum_ctrl_on_off.svg')

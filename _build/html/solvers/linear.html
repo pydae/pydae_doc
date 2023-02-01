@@ -1,0 +1,1481 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Linear solvers &#8212; DAE systems in python</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script >const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.svg" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">DAE systems in python</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p>
+ <span class="caption-text">
+  DAE theory
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../dae/dae.html">
+   Differential Algebraic Equations (DAE)
+  </a>
+ </li>
+</ul>
+<p>
+ <span class="caption-text">
+  Pendulum example
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pendulum/pendulum_doc.html">
+   Pendulum DAE system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pendulum/pendulum_sim.html">
+   Pendulum simulation
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/main?urlpath=tree/docs/solvers/linear.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/solvers/linear.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#numpy">
+   numpy
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pypardiso">
+   pypardiso
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#working-with-ctypes">
+     Working with ctypes
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Linear solvers</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#numpy">
+   numpy
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pypardiso">
+   pypardiso
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#working-with-ctypes">
+     Working with ctypes
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="linear-solvers">
+<h1>Linear solvers<a class="headerlink" href="#linear-solvers" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">spsolve</span><span class="p">,</span><span class="n">bicg</span><span class="p">,</span><span class="n">gmres</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">pypardiso</span>
+<span class="kn">import</span> <span class="nn">numba</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">A_sp</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+<span class="n">b_sp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">A_de</span> <span class="o">=</span> <span class="n">A_sp</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="numpy">
+<h2>numpy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> np.linalg.solve(A_de,b_sp)
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A_de</span><span class="p">,</span><span class="n">b_sp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>130 ms ± 8.42 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-0.28163834,  0.08875548,  1.15262372, ..., -4.31285585,
+       -3.80980083, -6.41028037])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pypardiso">
+<h2>pypardiso<a class="headerlink" href="#pypardiso" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">pypardiso</span><span class="o">.</span><span class="n">spsolve</span><span class="p">(</span><span class="n">A_sp</span><span class="p">,</span> <span class="n">b_sp</span><span class="p">)</span>
+<span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-0.28163834,  0.08875548,  1.15262372, ..., -4.31285585,
+       -3.80980083, -6.41028037])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pypardiso.ps<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cffi</span>
+<span class="kn">from</span> <span class="nn">ctypes.util</span> <span class="kn">import</span> <span class="n">find_library</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="n">mkl_rt</span> <span class="o">=</span> <span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;mkl_rt.1&#39;</span><span class="p">)</span>
+
+
+<span class="n">ffi</span> <span class="o">=</span> <span class="n">cffi</span><span class="o">.</span><span class="n">FFI</span><span class="p">()</span>
+<span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s2">&quot;int pardiso (void *pt[64], int *maxfct, int *mnum, int *mtype, int *phase, int *n, double *a, int *ia, int *ja, int *perm, int *nrhs, int *iparm, double *dparm, double *b, double *x, int *error);&quot;</span><span class="p">)</span>
+<span class="n">mkl_pardiso</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">dlopen</span><span class="p">(</span><span class="n">mkl_rt</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span><span class="n">A_de</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+<span class="n">ia</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span><span class="n">A_de</span><span class="p">)</span><span class="o">.</span><span class="n">row</span>
+<span class="n">ja</span> <span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span><span class="n">A_de</span><span class="p">)</span><span class="o">.</span><span class="n">col</span>
+
+<span class="n">pA</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">pia</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
+<span class="n">pja</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
+
+<span class="n">pb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">b_sp</span><span class="p">)</span>
+<span class="n">px</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">b_sp</span><span class="p">))</span>
+
+<span class="n">pt_type</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+<span class="n">pt</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;void *[64]&quot;</span><span class="p">)</span>
+<span class="n">pt</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">pt_type</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">maxfct</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mnum</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mtype</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="n">A_sp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">perm</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int []&quot;</span><span class="p">,</span> <span class="n">A_sp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">nrhs</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">iparm</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int []&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="n">dparm</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;double []&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="c1">#b = ffi.new(&quot;double []&quot;, b_sp)</span>
+<span class="c1">#x = ffi.new(&quot;double []&quot;, np.copy(b_sp))</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">pardiso</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">maxfct</span><span class="p">,</span> <span class="n">mnum</span><span class="p">,</span> <span class="n">mtype</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">pA</span><span class="p">,</span> <span class="n">pia</span><span class="p">,</span> <span class="n">pja</span><span class="p">,</span> <span class="n">perm</span><span class="p">,</span> <span class="n">nrhs</span><span class="p">,</span> <span class="n">iparm</span><span class="p">,</span> <span class="n">dparm</span><span class="p">,</span> <span class="n">pb</span><span class="p">,</span> <span class="n">px</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_25632</span>\<span class="mf">1716964377.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="n">error</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span> 
+<span class="ne">---&gt; </span><span class="mi">40</span> <span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">pardiso</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">maxfct</span><span class="p">,</span> <span class="n">mnum</span><span class="p">,</span> <span class="n">mtype</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">pA</span><span class="p">,</span> <span class="n">pia</span><span class="p">,</span> <span class="n">pja</span><span class="p">,</span> <span class="n">perm</span><span class="p">,</span> <span class="n">nrhs</span><span class="p">,</span> <span class="n">iparm</span><span class="p">,</span> <span class="n">dparm</span><span class="p">,</span> <span class="n">pb</span><span class="p">,</span> <span class="n">px</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> 
+
+<span class="ne">TypeError</span>: initializer for ctype &#39;void * *&#39; must be a cdata pointer, not _ctypes.PyCPointerType
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numba</span>
+
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_double</span>
+
+<span class="n">pardiso_sig</span> <span class="o">=</span> <span class="n">numba</span><span class="o">.</span><span class="n">cfunc</span><span class="p">(</span><span class="s2">&quot;c_int, c_int, c_int, c_int, c_int, c_void_p, c_int, c_void_p, c_int, c_int, c_int, c_int, c_int, c_void_p, c_void_p, c_void_p&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_24676</span>\<span class="mf">2916494125.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_double</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> 
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">pardiso_sig</span> <span class="o">=</span> <span class="n">numba</span><span class="o">.</span><span class="n">cfunc</span><span class="p">(</span><span class="s2">&quot;c_int, c_int, c_int, c_int, c_int, c_void_p, c_int, c_void_p, c_int, c_int, c_int, c_int, c_int, c_void_p, c_void_p, c_void_p&quot;</span><span class="p">)</span>
+
+<span class="nn">c:\Users\jmmau\anaconda3\lib\site-packages\numba\core\decorators.py</span> in <span class="ni">cfunc</span><span class="nt">(sig, locals, cache, pipeline_class, **options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">270</span> 
+<span class="g g-Whitespace">    </span><span class="mi">271</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">272</span><span class="sd">     sig = sigutils.normalize_signature(sig)</span>
+<span class="g g-Whitespace">    </span><span class="mi">273</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">274</span><span class="sd">     def wrapper(func):</span>
+
+<span class="nn">c:\Users\jmmau\anaconda3\lib\site-packages\numba\core\sigutils.py</span> in <span class="ni">normalize_signature</span><span class="nt">(sig)</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">29</span>         <span class="n">parsed</span> <span class="o">=</span> <span class="n">_parse_signature_string</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">30</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span>         <span class="n">parsed</span> <span class="o">=</span> <span class="n">sig</span>
+
+<span class="nn">c:\Users\jmmau\anaconda3\lib\site-packages\numba\core\sigutils.py</span> in <span class="ni">_parse_signature_string</span><span class="nt">(signature_str)</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="s2">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span><span class="s2">     # Just eval signature_str using the types submodules as globals</span>
+<span class="ne">---&gt; </span><span class="mi">19</span><span class="s2">     return eval(signature_str, </span><span class="si">{}</span><span class="s2">, types.__dict__)</span>
+<span class="g g-Whitespace">     </span><span class="mi">20</span><span class="s2"> </span>
+<span class="g g-Whitespace">     </span><span class="mi">21</span><span class="s2"> </span>
+
+<span class="s2">&lt;string&gt; in &lt;module&gt;</span>
+
+<span class="ne">NameError</span>: name &#39;c_int&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> pypardiso.spsolve(A_sp, b_sp)
+<span class="c1">#pypardiso.spsolve(A_sp, b_sp)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.23 ms ± 252 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">cfunc</span><span class="p">,</span> <span class="n">types</span><span class="p">,</span> <span class="n">carray</span>
+
+<span class="n">c_sig</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">void</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">CPointer</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">double</span><span class="p">),</span>
+                   <span class="n">types</span><span class="o">.</span><span class="n">CPointer</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">double</span><span class="p">),</span>
+                   <span class="n">types</span><span class="o">.</span><span class="n">intc</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">intc</span><span class="p">)</span>
+
+<span class="nd">@cfunc</span><span class="p">(</span><span class="n">c_sig</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_callback</span><span class="p">(</span><span class="n">in_</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">in_array</span> <span class="o">=</span> <span class="n">carray</span><span class="p">(</span><span class="n">in_</span><span class="p">,</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="n">out_array</span> <span class="o">=</span> <span class="n">carray</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">out_array</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">in_array</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c_sig</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">void</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">CPointer</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">double</span><span class="p">),</span>
+                   <span class="n">types</span><span class="o">.</span><span class="n">CPointer</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">double</span><span class="p">),</span>
+                   <span class="n">types</span><span class="o">.</span><span class="n">intc</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">intc</span><span class="p">)</span>
+                   
+<span class="c1"># Initialize the MKL Pardiso solver</span>
+<span class="n">iparm</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[64]&quot;</span><span class="p">)</span>
+<span class="n">pt</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[16]&quot;</span><span class="p">)</span>
+<span class="n">mtype</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>  <span class="c1"># Matrix type: real symmetric indefinite</span>
+<span class="c1">#mkl_pardiso.pardisoinit(pt, mtype, iparm)</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">A_sp</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+<span class="n">b_sp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+
+
+<span class="c1"># Set the parameters for the MKL Pardiso solver</span>
+<span class="n">maxfct</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mnum</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>  <span class="c1"># Analysis and factorization</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="n">A_sp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;double[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+<span class="n">ia</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;int[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">indptr</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">ja</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;int[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">indices</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">perm</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;int[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">b_sp</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="n">nrhs</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">msglvl</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;double[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">b_sp</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">b_sp</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;double[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">b_sp</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">pardiso</span><span class="p">(</span><span class="n">A_sp</span><span class="p">,</span><span class="n">b_sp</span><span class="p">):</span>
+    <span class="n">pypardiso</span><span class="o">.</span><span class="n">spsolve</span><span class="p">(</span><span class="n">A_sp</span><span class="p">,</span> <span class="n">b_sp</span><span class="p">)</span>
+
+<span class="n">pardiso</span><span class="p">(</span><span class="n">A_sp</span><span class="p">,</span><span class="n">b_sp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+TypingError                               Traceback (most recent call last)
+~\AppData\Local\Temp\ipykernel_25088\1270778715.py in &lt;module&gt;
+      3     pypardiso.spsolve(A_sp, b_sp)
+      4 
+----&gt; 5 pardiso(A_sp,b_sp)
+
+c:\Users\jmmau\anaconda3\lib\site-packages\numba\core\dispatcher.py in _compile_for_args(self, *args, **kws)
+    466                 e.patch_message(msg)
+    467 
+--&gt; 468             error_rewrite(e, &#39;typing&#39;)
+    469         except errors.UnsupportedError as e:
+    470             # Something unsupported is present in the user code, add help info
+
+c:\Users\jmmau\anaconda3\lib\site-packages\numba\core\dispatcher.py in error_rewrite(e, issue_type)
+    407                 raise e
+    408             else:
+--&gt; 409                 raise e.with_traceback(None)
+    410 
+    411         argtypes = []
+
+TypingError: Failed in nopython mode pipeline (step: nopython frontend)
+non-precise type pyobject
+During: typing of argument at C:\Users\jmmau\AppData\Local\Temp\ipykernel_25088\1270778715.py (3)
+
+File &quot;..\..\..\AppData\Local\Temp\ipykernel_25088\1270778715.py&quot;, line 3:
+&lt;source missing, REPL/exec in use?&gt; 
+
+This error may have been caused by the following argument(s):
+- argument 0: Cannot determine Numba type of &lt;class &#39;scipy.sparse._csr.csr_matrix&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gmres</span><span class="p">(</span><span class="n">A_sp</span><span class="p">,</span> <span class="n">b_sp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mkl</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ctypes.util</span> <span class="kn">import</span> <span class="n">find_library</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="working-with-ctypes">
+<h3>Working with ctypes<a class="headerlink" href="#working-with-ctypes" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mkl_rt</span> <span class="o">=</span> <span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;mkl_rt.1&#39;</span><span class="p">)</span>
+<span class="n">libmkl</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">mkl_rt</span><span class="p">)</span>
+
+<span class="n">mkl_pardiso</span> <span class="o">=</span> <span class="n">libmkl</span><span class="o">.</span><span class="n">pardiso</span>
+
+<span class="n">pt_type</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+<span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">pt_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>    <span class="c1"># pt</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># maxfct</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># mnum</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># mtype</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># phase</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># n</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>                <span class="c1"># a</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># ia</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># ja</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># perm</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># nrhs</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># iparm</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># msglvl</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>                <span class="c1"># b</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>                <span class="c1"># x</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">)]</span>      <span class="c1"># error</span>
+
+<span class="n">mtype</span><span class="o">=</span><span class="mi">11</span>
+<span class="n">phase</span><span class="o">=</span><span class="mi">13</span>
+<span class="n">size_limit_storage</span><span class="o">=</span><span class="mf">5e7</span>
+
+<span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pt_type</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">iparm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+<span class="n">mtype</span> <span class="o">=</span> <span class="n">mtype</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">phase</span>
+<span class="n">msglvl</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">factorized_A</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">size_limit_storage</span> <span class="o">=</span> <span class="n">size_limit_storage</span>
+<span class="n">_solve_transposed</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">b_sp</span><span class="p">)</span>
+<span class="n">pardiso_error</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">c_int32_p</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">)</span>
+<span class="n">c_float64_p</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">A_sp</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">b_sp</span>
+
+<span class="n">ia</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">indptr</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">ja</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">indices</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">mkl_pardiso</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">pt_type</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>  <span class="c1"># pt</span>
+                          <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>  <span class="c1"># maxfct</span>
+                          <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>  <span class="c1"># mnum</span>
+                          <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">mtype</span><span class="p">)),</span>  <span class="c1"># mtype -&gt; 11 for real-nonsymetric</span>
+                          <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">phase</span><span class="p">)),</span>  <span class="c1"># phase -&gt; 13</span>
+                          <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>  <span class="c1"># N -&gt; number of equations/size of matrix</span>
+                          <span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">c_float64_p</span><span class="p">),</span>  <span class="c1"># A -&gt; non-zero entries in matrix</span>
+                          <span class="n">ia</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">c_int32_p</span><span class="p">),</span>  <span class="c1"># ia -&gt; csr-indptr</span>
+                          <span class="n">ja</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">c_int32_p</span><span class="p">),</span>  <span class="c1"># ja -&gt; csr-indices</span>
+                          <span class="n">perm</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">c_int32_p</span><span class="p">),</span>  <span class="c1"># perm -&gt; empty</span>
+                          <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span>  <span class="c1"># nrhs</span>
+                          <span class="n">iparm</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">c_int32_p</span><span class="p">),</span>  <span class="c1"># iparm-array</span>
+                          <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">msglvl</span><span class="p">)),</span>  <span class="c1"># msg-level -&gt; 1: statistical info is printed</span>
+                          <span class="n">b_sp</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">c_float64_p</span><span class="p">),</span>  <span class="c1"># b -&gt; right-hand side vector/matrix</span>
+                          <span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">c_float64_p</span><span class="p">),</span>  <span class="c1"># x -&gt; output</span>
+                          <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">pardiso_error</span><span class="p">))</span>  <span class="c1"># pardiso error</span>
+
+<span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_32848</span>\<span class="mf">376059779.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">mkl_rt</span> <span class="o">=</span> <span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;mkl_rt.1&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">libmkl</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">mkl_rt</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> 
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">mkl_pardiso</span> <span class="o">=</span> <span class="n">libmkl</span><span class="o">.</span><span class="n">pardiso</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
+
+<span class="ne">NameError</span>: name &#39;find_library&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mkl</span>
+<span class="n">mkl</span><span class="o">.</span><span class="n">set_num_stripes</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;function mkl._py_mkl_service.set_num_stripes&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mkl_rt</span> <span class="o">=</span> <span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;mkl_rt.1&#39;</span><span class="p">)</span>
+<span class="n">libmkl</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">mkl_rt</span><span class="p">)</span>
+
+<span class="n">mkl_pardiso</span> <span class="o">=</span> <span class="n">libmkl</span><span class="o">.</span><span class="n">pardiso</span>
+
+<span class="n">pt_type</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+<span class="n">maxfct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="n">p_maxfct</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">maxfct</span><span class="p">)</span>
+
+<span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">pt_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>    <span class="c1"># pt</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># maxfct</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># mnum</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># mtype</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># phase</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># n</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>                <span class="c1"># a</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># ia</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># ja</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># perm</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># nrhs</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># iparm</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">),</span>      <span class="c1"># msglvl</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>                <span class="c1"># b</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>                <span class="c1"># x</span>
+                                      <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">)]</span>      <span class="c1"># error</span>
+
+<span class="n">mtype</span><span class="o">=</span><span class="mi">11</span>
+<span class="n">phase</span><span class="o">=</span><span class="mi">13</span>
+<span class="n">size_limit_storage</span><span class="o">=</span><span class="mf">5e7</span>
+
+<span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pt_type</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">iparm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+<span class="n">mtype</span> <span class="o">=</span> <span class="n">mtype</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">phase</span>
+<span class="n">msglvl</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">factorized_A</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">size_limit_storage</span> <span class="o">=</span> <span class="n">size_limit_storage</span>
+<span class="n">_solve_transposed</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">b_sp</span><span class="p">)</span>
+<span class="n">pardiso_error</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">c_int32_p</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">)</span>
+<span class="n">c_float64_p</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">A_sp</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">b_sp</span>
+
+<span class="n">ia</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">indptr</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">ja</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">indices</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">eval_mkl</span><span class="p">(</span><span class="n">A_data</span><span class="p">,</span><span class="n">A_shape</span><span class="p">):</span>
+    <span class="c1">#pt_type = (ctypes.c_int64, np.int64)</span>
+    <span class="n">pardiso_error</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># c_int32_p = ctypes.POINTER(ctypes.c_int32)</span>
+    <span class="c1"># c_float64_p = ctypes.POINTER(ctypes.c_double)</span>
+    <span class="c1"># mkl_pardiso(pt.ctypes.data_as(ctypes.POINTER(ctypes.c_int64)),  # pt</span>
+    <span class="c1">#                         ctypes.byref(ctypes.c_int32(1)),  # maxfct</span>
+    <span class="c1">#                         ctypes.byref(ctypes.c_int32(1)),  # mnum</span>
+    <span class="c1">#                         ctypes.byref(ctypes.c_int32(11)),  # mtype -&gt; 11 for real-nonsymetric</span>
+    <span class="c1">#                         ctypes.byref(ctypes.c_int32(13)),  # phase -&gt; 13</span>
+    <span class="c1">#                         ctypes.byref(ctypes.c_int32(A_shape)),  # N -&gt; number of equations/size of matrix</span>
+    <span class="c1">#                         A_data.ctypes.data_as(c_float64_p),  # A -&gt; non-zero entries in matrix</span>
+    <span class="c1">#                         ia.ctypes.data_as(c_int32_p),  # ia -&gt; csr-indptr</span>
+    <span class="c1">#                         ja.ctypes.data_as(c_int32_p),  # ja -&gt; csr-indices</span>
+    <span class="c1">#                         perm.ctypes.data_as(c_int32_p),  # perm -&gt; empty</span>
+    <span class="c1">#                         ctypes.byref(ctypes.c_int32(1)),  # nrhs</span>
+    <span class="c1">#                         iparm.ctypes.data_as(c_int32_p),  # iparm-array</span>
+    <span class="c1">#                         ctypes.byref(ctypes.c_int32(1)),  # msg-level -&gt; 1: statistical info is printed</span>
+    <span class="c1">#                         b_sp.ctypes.data_as(c_float64_p),  # b -&gt; right-hand side vector/matrix</span>
+    <span class="c1">#                         x.ctypes.data_as(c_float64_p),  # x -&gt; output</span>
+    <span class="c1">#                         ctypes.byref(pardiso_error))  # pardiso error</span>
+
+    <span class="c1"># return x</span>
+
+<span class="n">maxfct</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">mnum</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>  <span class="c1"># mnum</span>
+<span class="n">mtype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">mtype</span><span class="p">)),</span>  <span class="c1"># mtype -&gt; 11 for real-nonsymetric</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">phase</span><span class="p">)),</span>  <span class="c1"># phase -&gt; 13</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>  <span class="c1"># N -&gt; number of equations/size of matrix</span>
+
+<span class="n">A_data</span> <span class="o">=</span> <span class="n">A_sp</span><span class="o">.</span><span class="n">data</span>
+<span class="n">A_shape</span> <span class="o">=</span> <span class="n">A_sp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">eval_mkl</span><span class="p">(</span><span class="n">A_data</span><span class="p">,</span><span class="n">A_shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_24676</span>\<span class="mf">3374075251.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">mkl_pardiso</span> <span class="o">=</span> <span class="n">libmkl</span><span class="o">.</span><span class="n">pardiso</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">pt_type</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> 
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">maxfct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numba</span><span class="o">.</span><span class="n">int32</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>int32
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cffi</span> <span class="kn">import</span> <span class="n">FFI</span>
+<span class="kn">import</span> <span class="nn">cffi</span>
+<span class="kn">from</span> <span class="nn">ctypes.util</span> <span class="kn">import</span> <span class="n">find_library</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="n">mkl_rt</span> <span class="o">=</span> <span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;mkl_rt.1.dll&#39;</span><span class="p">)</span>
+
+<span class="n">ffi</span> <span class="o">=</span> <span class="n">FFI</span><span class="p">()</span>
+
+<span class="c1"># Define the MKL Pardiso functions and variables</span>
+<span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    void pardisoinit (void   *pt, int    *mtype, int *iparm);</span>
+<span class="s2">    void pardiso     (void   *pt, int    *maxfct, int *mnum, int *mtype, int *phase,</span>
+<span class="s2">                      int    *n, double *a, int *ia, int *ja, int    *perm, int *nrhs,</span>
+<span class="s2">                      int    *iparm, int *msglvl, double *b, double *x, int *error);</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Load the MKL Pardiso library</span>
+<span class="n">mkl_pardiso</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">dlopen</span><span class="p">(</span><span class="n">mkl_rt</span><span class="p">)</span>
+
+<span class="c1"># Initialize the MKL Pardiso solver</span>
+<span class="n">iparm</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[64]&quot;</span><span class="p">)</span>
+<span class="n">pt</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">mtype</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Matrix type: real symmetric indefinite</span>
+<span class="c1">#mkl_pardiso.pardisoinit(pt, mtype, iparm)</span>
+
+<span class="c1"># Set the parameters for the MKL Pardiso solver</span>
+<span class="n">maxfct</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mnum</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>  <span class="c1"># Analysis and factorization</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;double[9]&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">])</span>
+<span class="n">ia</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[4]&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">ja</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[9]&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">perm</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[3]&quot;</span><span class="p">)</span>
+<span class="n">nrhs</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">msglvl</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;double[3]&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;double[3]&quot;</span><span class="p">)</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">)</span>
+
+<span class="c1"># Solve the linear system using MKL Pardiso</span>
+<span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">pardiso</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">maxfct</span><span class="p">,</span> <span class="n">mnum</span><span class="p">,</span> <span class="n">mtype</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">ia</span><span class="p">,</span> <span class="n">ja</span><span class="p">,</span> <span class="n">perm</span><span class="p">,</span> <span class="n">nrhs</span><span class="p">,</span> <span class="n">iparm</span><span class="p">,</span> <span class="n">msglvl</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Output: (1.0, 2.0, 2.0)</span>
+
+<span class="c1"># Print the solution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hola&#39;</span><span class="p">)</span>  <span class="c1"># Output: (1.0, 2.0, 2.0)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">Canceled</span> <span class="n">future</span> <span class="k">for</span> <span class="n">execute_request</span> <span class="n">message</span> <span class="n">before</span> <span class="n">replies</span> <span class="n">were</span> <span class="n">done</span>
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">Kernel</span> <span class="n">crashed</span> <span class="k">while</span> <span class="n">executing</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">the</span> <span class="n">current</span> <span class="n">cell</span> <span class="ow">or</span> <span class="n">a</span> <span class="n">previous</span> <span class="n">cell</span><span class="o">.</span> <span class="n">Please</span> <span class="n">review</span> <span class="n">the</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">cell</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">to</span> <span class="n">identify</span> <span class="n">a</span> <span class="n">possible</span> <span class="n">cause</span> <span class="n">of</span> <span class="n">the</span> <span class="n">failure</span><span class="o">.</span> <span class="n">Click</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;https://aka.ms/vscodeJupyterKernelCrash&#39;</span><span class="o">&gt;</span><span class="n">here</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">info</span><span class="o">.</span> <span class="n">View</span> <span class="n">Jupyter</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;command:jupyter.viewOutput&#39;</span><span class="o">&gt;</span><span class="n">log</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">further</span> <span class="n">details</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">call_pardiso</span><span class="p">(</span><span class="n">A_data</span><span class="p">,</span><span class="n">A_indices</span><span class="p">,</span><span class="n">A_indptr</span><span class="p">,</span><span class="n">A_shape</span><span class="p">):</span>
+
+    <span class="n">pardiso_error</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+    <span class="n">mkl_pardiso</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>  <span class="c1"># pt</span>
+                           <span class="mi">1</span><span class="p">,</span>  <span class="c1"># maxfct</span>
+                           <span class="mi">1</span><span class="p">,</span>  <span class="c1"># mnum</span>
+                           <span class="mi">11</span><span class="p">,</span>  <span class="c1"># mtype -&gt; 11 for real-nonsymetric</span>
+                           <span class="mi">13</span><span class="p">,</span>  <span class="c1"># phase -&gt; 13</span>
+                           <span class="n">A_shape</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uc_longlong</span><span class="p">)),</span>  <span class="c1"># N -&gt; number of equations/size of matrix</span>
+                           <span class="n">A_data</span><span class="p">,</span>  <span class="c1"># A -&gt; non-zero entries in matrix</span>
+                           <span class="n">A_indptr</span><span class="p">,</span>  <span class="c1"># ia -&gt; csr-indptr</span>
+                           <span class="n">A_indices</span><span class="p">,</span>  <span class="c1"># ja -&gt; csr-indices</span>
+                           <span class="n">perm</span><span class="p">,</span>  <span class="c1"># perm -&gt; empty</span>
+                           <span class="mi">1</span><span class="p">,</span>  <span class="c1"># nrhs</span>
+                           <span class="n">iparm</span><span class="p">,</span>  <span class="c1"># iparm-array</span>
+                           <span class="mi">1</span><span class="p">,</span>  <span class="c1"># msg-level -&gt; 1: statistical info is printed</span>
+                           <span class="n">b_sp</span><span class="p">,</span>  <span class="c1"># b -&gt; right-hand side vector/matrix</span>
+                           <span class="n">x</span><span class="p">,</span>  <span class="c1"># x -&gt; output</span>
+                           <span class="mi">0</span><span class="p">)</span>  <span class="c1"># pardiso error</span>
+
+
+<span class="n">c_int32_p</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">)</span>
+<span class="n">c_float64_p</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">)</span>
+
+<span class="n">call_pardiso</span><span class="p">(</span><span class="n">A_sp</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">A_sp</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span><span class="n">A_sp</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span><span class="n">A_sp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+TypingError                               Traceback (most recent call last)
+~\AppData\Local\Temp\ipykernel_24676\3464306246.py in &lt;module&gt;
+     26 c_float64_p = ctypes.POINTER(ctypes.c_double)
+     27 
+---&gt; 28 call_pardiso(A_sp.data,A_sp.indices,A_sp.indptr,A_sp.shape[0])
+
+c:\Users\jmmau\anaconda3\lib\site-packages\numba\core\dispatcher.py in _compile_for_args(self, *args, **kws)
+    466                 e.patch_message(msg)
+    467 
+--&gt; 468             error_rewrite(e, &#39;typing&#39;)
+    469         except errors.UnsupportedError as e:
+    470             # Something unsupported is present in the user code, add help info
+
+c:\Users\jmmau\anaconda3\lib\site-packages\numba\core\dispatcher.py in error_rewrite(e, issue_type)
+    407                 raise e
+    408             else:
+--&gt; 409                 raise e.with_traceback(None)
+    410 
+    411         argtypes = []
+
+TypingError: Failed in nopython mode pipeline (step: nopython frontend)
+Unknown attribute &#39;ctypes&#39; of type int64
+
+File &quot;..\..\..\AppData\Local\Temp\ipykernel_24676\3464306246.py&quot;, line 12:
+&lt;source missing, REPL/exec in use?&gt;
+
+During: typing of get attribute at C:\Users\jmmau\AppData\Local\Temp\ipykernel_24676\3464306246.py (12)
+
+File &quot;..\..\..\AppData\Local\Temp\ipykernel_24676\3464306246.py&quot;, line 12:
+&lt;source missing, REPL/exec in use?&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pardiso_error</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c_long(0)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mkl_pardiso.pardiso<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Red">Call signature:</span> mkl_pardiso<span class=" -Color -Color-Bold -Color-Bold-Yellow">.</span>pardiso<span class=" -Color -Color-Bold -Color-Bold-Yellow">(*</span>args<span class=" -Color -Color-Bold -Color-Bold-Yellow">,</span> <span class=" -Color -Color-Bold -Color-Bold-Yellow">**</span>kwargs<span class=" -Color -Color-Bold -Color-Bold-Yellow">)</span>
+<span class=" -Color -Color-Bold -Color-Bold-Red">Type:</span>           _CDataBase
+<span class=" -Color -Color-Bold -Color-Bold-Red">String form:</span>    &lt;cdata &#39;void(*)(void *, int *, int *, int *, int *, int *, double *, int *, int *, int *, int *, int *, int *, double *, double *, int *)&#39; 0x00007FF826686720&gt;
+<span class=" -Color -Color-Bold -Color-Bold-Red">File:</span>           c:\users\jmmau\anaconda3\lib\site-packages\_cffi_backend.cp39-win_amd64.pyd
+<span class=" -Color -Color-Bold -Color-Bold-Red">Docstring:</span>      The internal base type for CData objects.  Use FFI.CData to access it.  Always check with isinstance(): subtypes are sometimes returned on CPython, for performance reasons.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">pardiso</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">iparm</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">ia</span><span class="p">,</span> <span class="n">ja</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">Canceled</span> <span class="n">future</span> <span class="k">for</span> <span class="n">execute_request</span> <span class="n">message</span> <span class="n">before</span> <span class="n">replies</span> <span class="n">were</span> <span class="n">done</span>
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">Kernel</span> <span class="n">crashed</span> <span class="k">while</span> <span class="n">executing</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">the</span> <span class="n">current</span> <span class="n">cell</span> <span class="ow">or</span> <span class="n">a</span> <span class="n">previous</span> <span class="n">cell</span><span class="o">.</span> <span class="n">Please</span> <span class="n">review</span> <span class="n">the</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">cell</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">to</span> <span class="n">identify</span> <span class="n">a</span> <span class="n">possible</span> <span class="n">cause</span> <span class="n">of</span> <span class="n">the</span> <span class="n">failure</span><span class="o">.</span> <span class="n">Click</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;https://aka.ms/vscodeJupyterKernelCrash&#39;</span><span class="o">&gt;</span><span class="n">here</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">info</span><span class="o">.</span> <span class="n">View</span> <span class="n">Jupyter</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;command:jupyter.viewOutput&#39;</span><span class="o">&gt;</span><span class="n">log</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">further</span> <span class="n">details</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">iparm</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[64]&quot;</span><span class="p">)</span>
+<span class="n">pt</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[64]&quot;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;double[100]&quot;</span><span class="p">)</span>
+<span class="n">ia</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[100]&quot;</span><span class="p">)</span>
+<span class="n">ja</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int[100]&quot;</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;double[100]&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set up the input parameters</span>
+<span class="n">iparm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Use default values for all parameters</span>
+<span class="n">iparm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># Use the 2-level factorization algorithm</span>
+
+<span class="c1"># Set up the matrix A</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+  <span class="n">ia</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">IA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+  <span class="n">ja</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">JA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+
+
+<span class="c1"># Set up the right-hand side vector b</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_12628</span>\<span class="mf">2677574406.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="c1"># Set up the matrix A</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">15</span>   <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span>   <span class="n">ia</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">IA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span>   <span class="n">ja</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">JA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="ne">NameError</span>: name &#39;A&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numba.extending</span> <span class="kn">import</span> <span class="n">get_cython_function_address</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="c1"># Datatype pointers to give to the cython LAPACK functions</span>
+<span class="n">_PTR</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span>
+
+<span class="n">_dbl</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
+<span class="n">_int</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span>
+
+<span class="n">_ptr_dbl</span> <span class="o">=</span> <span class="n">_PTR</span><span class="p">(</span><span class="n">_dbl</span><span class="p">)</span>
+<span class="n">_ptr_int</span> <span class="o">=</span> <span class="n">_PTR</span><span class="p">(</span><span class="n">_int</span><span class="p">)</span>
+
+<span class="c1"># zgges is the complex QZ-decomposition</span>
+<span class="n">zgges_addr</span> <span class="o">=</span> <span class="n">get_cython_function_address</span><span class="p">(</span><span class="s1">&#39;scipy.linalg.cython_lapack&#39;</span><span class="p">,</span> <span class="s1">&#39;zgges&#39;</span><span class="p">)</span>
+<span class="n">zgges_functype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CFUNCTYPE</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># JOBVSL</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># JOBVSR</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># SORT</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># SELCTG</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># N</span>
+                                  <span class="n">_ptr_dbl</span><span class="p">,</span>  <span class="c1"># A, complex</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># LDA</span>
+                                  <span class="n">_ptr_dbl</span><span class="p">,</span>  <span class="c1"># B, complex</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># LDB</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># SDIM</span>
+                                  <span class="n">_ptr_dbl</span><span class="p">,</span>  <span class="c1"># ALPHA, complex</span>
+                                  <span class="n">_ptr_dbl</span><span class="p">,</span>  <span class="c1"># BETA, complex</span>
+                                  <span class="n">_ptr_dbl</span><span class="p">,</span>  <span class="c1"># VSL, complex</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># LDVSL</span>
+                                  <span class="n">_ptr_dbl</span><span class="p">,</span>  <span class="c1"># VSR, complex</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># LDVSR</span>
+                                  <span class="n">_ptr_dbl</span><span class="p">,</span>  <span class="c1"># WORK, complex</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># LWORK</span>
+                                  <span class="n">_ptr_dbl</span><span class="p">,</span>  <span class="c1"># RWORK</span>
+                                  <span class="n">_ptr_int</span><span class="p">,</span>  <span class="c1"># BWORK</span>
+                                  <span class="n">_ptr_int</span><span class="p">)</span>  <span class="c1"># INFO</span>
+<span class="n">zgges_fn</span> <span class="o">=</span> <span class="n">zgges_functype</span><span class="p">(</span><span class="n">zgges_addr</span><span class="p">)</span>
+
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">numba_zgges</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">_M</span><span class="p">,</span> <span class="n">_N</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">y</span>
+
+    <span class="n">JOBVSL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;V&#39;</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">JOBVSR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;V&#39;</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">SORT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">SELCTG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">LDA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">LDB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">SDIM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="c1"># out</span>
+
+    <span class="n">ALPHA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span> <span class="c1"># out</span>
+    <span class="n">BETA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span> <span class="c1"># out</span>
+    <span class="n">LDVSL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">VSL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">_N</span><span class="p">,</span> <span class="n">_N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span> <span class="c1"># out</span>
+    <span class="n">LDVSR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">VSR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">_N</span><span class="p">,</span> <span class="n">_N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span> <span class="c1"># out</span>
+
+    <span class="n">WORK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span> <span class="c1">#out</span>
+    <span class="n">LWORK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">RWORK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">BWORK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">_N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">INFO</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="n">zgges_fn</span><span class="p">(</span><span class="n">JOBVSL</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">JOBVSR</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">SORT</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">SELCTG</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">N</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">A</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LDA</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">B</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LDB</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">SDIM</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">ALPHA</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">BETA</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">VSL</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LDVSL</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">VSR</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LDVSR</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">WORK</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LWORK</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">RWORK</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">BWORK</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">INFO</span><span class="o">.</span><span class="n">ctypes</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculated workspace size as&quot;</span><span class="p">,</span> <span class="n">WORK</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">WS_SIZE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">WORK</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+    <span class="n">LWORK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">WS_SIZE</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">WORK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">WS_SIZE</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+    <span class="n">zgges_fn</span><span class="p">(</span><span class="n">JOBVSL</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">JOBVSR</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">SORT</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">SELCTG</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">N</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">A</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LDA</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">B</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LDB</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">SDIM</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">ALPHA</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">BETA</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">VSL</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LDVSL</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">VSR</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LDVSR</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">WORK</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">LWORK</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">RWORK</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">BWORK</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+             <span class="n">INFO</span><span class="o">.</span><span class="n">ctypes</span><span class="p">)</span>
+
+    <span class="c1"># The LAPACK function also returns SDIM, WORK, BWORK, but I don&#39;t need them here.</span>
+    <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">ALPHA</span><span class="p">,</span> <span class="n">BETA</span><span class="p">,</span> <span class="n">VSL</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">VSR</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">INFO</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+    <span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">numba_zgges</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">),</span> 
+                                           <span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">))</span>
+
+    <span class="n">aa</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">AA</span> <span class="o">@</span> <span class="n">Z</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">bb</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">BB</span> <span class="o">@</span> <span class="n">Z</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">bb</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">bb</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">Q</span> <span class="o">@</span> <span class="n">Q</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">Z</span> <span class="o">@</span> <span class="n">Z</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">BB</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+Calculated workspace size as (20+0j)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+<span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">numba_zgges</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">),</span> 
+                                        <span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_25088</span>\<span class="mf">1598352036.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">numba_zgges</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">),</span> 
+<span class="g g-Whitespace">      </span><span class="mi">5</span>                                         <span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">))</span>
+
+<span class="ne">TypeError</span>: cannot unpack non-iterable NoneType object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numba</span> <span class="k">as</span> <span class="nn">nb</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="n">mkl_rt</span> <span class="o">=</span> <span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;splev&#39;</span><span class="p">)</span>
+
+<span class="n">lib</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="s2">&quot;splev.dll&quot;</span><span class="p">)</span>
+
+<span class="n">dble_p</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">)</span>
+<span class="n">int_p</span> <span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_longlong</span><span class="p">)</span>
+
+<span class="n">SPLEV</span><span class="o">=</span><span class="n">lib</span><span class="o">.</span><span class="n">SPLEV</span>
+<span class="n">SPLEV</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span>  <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span>
+<span class="n">SPLEV</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">(</span><span class="n">dble_p</span><span class="p">,</span><span class="n">int_p</span><span class="p">,</span><span class="n">dble_p</span><span class="p">,</span><span class="n">int_p</span><span class="p">,</span><span class="n">dble_p</span><span class="p">,</span><span class="n">dble_p</span><span class="p">,</span><span class="n">int_p</span><span class="p">,</span><span class="n">int_p</span><span class="p">,</span><span class="n">int_p</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">types</span>
+<span class="kn">from</span> <span class="nn">numba.extending</span> <span class="kn">import</span> <span class="n">intrinsic</span>
+<span class="kn">from</span> <span class="nn">numba.core</span> <span class="kn">import</span> <span class="n">cgutils</span>
+
+<span class="nd">@intrinsic</span>
+<span class="k">def</span> <span class="nf">val_to_ptr</span><span class="p">(</span><span class="n">typingctx</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">impl</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="n">ptr</span> <span class="o">=</span> <span class="n">cgutils</span><span class="o">.</span><span class="n">alloca_once_value</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">ptr</span>
+    <span class="n">sig</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">CPointer</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">typeof</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">instance_type</span><span class="p">)(</span><span class="n">nb</span><span class="o">.</span><span class="n">typeof</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">instance_type</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sig</span><span class="p">,</span> <span class="n">impl</span>
+
+<span class="nd">@intrinsic</span>
+<span class="k">def</span> <span class="nf">ptr_to_val</span><span class="p">(</span><span class="n">typingctx</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">impl</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">val</span>
+    <span class="n">sig</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">CPointer</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">sig</span><span class="p">,</span> <span class="n">impl</span>
+
+<span class="c1">#with intrinsics, temporary arrays are allocated on stack</span>
+<span class="c1">#faster but much more relevant for functions with very low runtime</span>
+<span class="nd">@nb</span><span class="o">.</span><span class="n">njit</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">splev_wrapped</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span><span class="n">e</span><span class="p">):</span>
+    <span class="c1">#There are just pointers passed to the fortran function.</span>
+    <span class="c1">#The arrays have to be contiguous!</span>
+    <span class="n">t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">coeff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="n">c</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">k</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    
+    <span class="n">n_arr</span><span class="o">=</span><span class="n">val_to_ptr</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">k_arr</span><span class="o">=</span><span class="n">val_to_ptr</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+    <span class="n">m_arr</span><span class="o">=</span><span class="n">val_to_ptr</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">e_arr</span><span class="o">=</span><span class="n">val_to_ptr</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">ier_arr</span><span class="o">=</span><span class="n">val_to_ptr</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    
+    <span class="n">SPLEV</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">n_arr</span><span class="p">,</span><span class="n">c</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">k_arr</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">m_arr</span><span class="p">,</span><span class="n">e_arr</span><span class="p">,</span><span class="n">ier_arr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">ptr_to_val</span><span class="p">(</span><span class="n">ier_arr</span><span class="p">)</span>
+
+<span class="c1">#without using intrinsics</span>
+<span class="nd">@nb</span><span class="o">.</span><span class="n">njit</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">splev_wrapped_2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span><span class="n">e</span><span class="p">):</span>
+    <span class="c1">#There are just pointers passed to the fortran function.</span>
+    <span class="c1">#The arrays have to be contiguous!</span>
+    <span class="n">t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">coeff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="n">c</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">k</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    
+    <span class="n">n_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>  <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">k_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>  <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">m_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>  <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">e_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>  <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">ier_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>  <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    
+    <span class="n">n_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">k_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">k</span>
+    <span class="n">m_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">e_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">e</span>
+    
+    <span class="n">SPLEV</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">n_arr</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">c</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">k_arr</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">m_arr</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">e_arr</span><span class="o">.</span><span class="n">ctypes</span><span class="p">,</span><span class="n">ier_arr</span><span class="o">.</span><span class="n">ctypes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">ier_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_24096</span>\<span class="mf">1309381061.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> 
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">lib</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span> <span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;splev&#39;</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> 
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">dble_p</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">)</span>
+
+<span class="nn">c:\Users\jmmau\anaconda3\lib\ctypes\__init__.py</span> in <span class="ni">LoadLibrary</span><span class="nt">(self, name)</span>
+<span class="g g-Whitespace">    </span><span class="mi">458</span> 
+<span class="g g-Whitespace">    </span><span class="mi">459</span>     <span class="k">def</span> <span class="nf">LoadLibrary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">460</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dlltype</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">461</span> 
+<span class="g g-Whitespace">    </span><span class="mi">462</span>     <span class="n">__class_getitem__</span> <span class="o">=</span> <span class="nb">classmethod</span><span class="p">(</span><span class="n">_types</span><span class="o">.</span><span class="n">GenericAlias</span><span class="p">)</span>
+
+<span class="nn">c:\Users\jmmau\anaconda3\lib\ctypes\__init__.py</span> in <span class="ni">__init__</span><span class="nt">(self, name, mode, handle, use_errno, use_last_error, winmode)</span>
+<span class="g g-Whitespace">    </span><span class="mi">362</span>                 <span class="kn">import</span> <span class="nn">nt</span>
+<span class="g g-Whitespace">    </span><span class="mi">363</span>                 <span class="n">mode</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">_LOAD_LIBRARY_SEARCH_DEFAULT_DIRS</span>
+<span class="ne">--&gt; </span><span class="mi">364</span>                 <span class="k">if</span> <span class="s1">&#39;/&#39;</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">or</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">365</span>                     <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">_getfullpathname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">366</span>                     <span class="n">mode</span> <span class="o">|=</span> <span class="n">nt</span><span class="o">.</span><span class="n">_LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR</span>
+
+<span class="ne">TypeError</span>: argument of type &#39;NoneType&#39; is not iterable
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;splev&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./solvers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Juan Manuel Mauricio<br/>
+  
+      &copy; Copyright 2020.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

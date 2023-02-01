@@ -4,10 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
     <title>Pendulum DAE system &#8212; DAE systems in python</title>
     
-  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -17,16 +20,8 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-  <link rel="stylesheet"
-    href="../_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
-
-    
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -34,7 +29,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -43,75 +39,97 @@
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script >const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
-    <script >
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pendulum simulation" href="pendulum_sim.html" />
     <link rel="prev" title="Differential Algebraic Equations (DAE)" href="../dae/dae.html" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en" />
+    <meta name="docsearch:language" content="None">
+    
 
-
-
+    <!-- Google Analytics -->
+    
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
     
 
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="../index.html">
-  
-  <img src="../_static/logo.svg" class="logo" alt="logo">
-  
-  
-  <h1 class="site-logo" id="site-title">DAE systems in python</h1>
-  
-</a>
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.svg" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">DAE systems in python</h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   pydae
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p>
  <span class="caption-text">
   DAE theory
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../dae/dae.html">
    Differential Algebraic Equations (DAE)
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p>
  <span class="caption-text">
   Pendulum example
  </span>
 </p>
-<ul class="current nav sidenav_l1">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Pendulum DAE system
@@ -124,104 +142,178 @@
  </li>
 </ul>
 
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="row topbar fixed-top container-xl">
-    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
     </div>
-    <div class="col pl-2 topbar-main">
-        
-        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-            <i class="fas fa-bars"></i>
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        
-        
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/pendulum/pendulum_doc.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-        <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        
-        
-    </div>
-</div>
-
-
-        <!-- Full screen (wrap in <a> to have style consistency -->
-        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                title="Fullscreen mode"><i
-                    class="fas fa-expand"></i></button></a>
-
-        <!-- Launch buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/main?urlpath=tree/docs/pendulum/pendulum_doc.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
-    </div>
-
-    <!-- Table of contents -->
-    <div class="d-none d-md-block col-md-2 bd-toc show">
-        
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
         </div>
-        <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/main?urlpath=tree/docs/pendulum/pendulum_doc.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/pendulum/pendulum_doc.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#formulation">
    Formulation
@@ -278,16 +370,88 @@
  </li>
 </ul>
 
-        </nav>
-        
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Pendulum DAE system</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#formulation">
+   Formulation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#differential-equations">
+     Differential equations
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algebraic-equations">
+     Algebraic equations
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dae-equations-in-vector-form">
+     DAE equations in vector form
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dynamic-and-algebraic-states-and-inputs">
+     Dynamic and algebraic states and inputs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#outputs">
+     Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pydae-model-building">
+   pydae model building
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#definition-of-variables-and-constants">
+     Definition of variables and constants
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#system-formulation">
+     System formulation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#build-the-model">
+     Build the model
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="section" id="pendulum-dae-system">
+  <section id="pendulum-dae-system">
 <h1>Pendulum DAE system<a class="headerlink" href="#pendulum-dae-system" title="Permalink to this headline">¶</a></h1>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
@@ -305,6 +469,7 @@
     src="https://www.youtube.com/embed/4a0FbQdH3dY"
     frameborder="0"
     allowfullscreen
+
 ></iframe>
 </div></div>
 </div>
@@ -1578,7 +1743,7 @@
 </svg>
 </div></div>
 </div>
-<div class="section" id="formulation">
+<section id="formulation">
 <h2>Formulation<a class="headerlink" href="#formulation" title="Permalink to this headline">¶</a></h2>
 <p>Backward solution:</p>
 <div class="math notranslate nohighlight">
@@ -1596,7 +1761,7 @@
 \mathbf 0 &amp; =  \mathbf {g (x,y^{run},u^{run}) }  
 \end{split}
 \end{split}\]</div>
-<div class="section" id="differential-equations">
+<section id="differential-equations">
 <h3>Differential equations<a class="headerlink" href="#differential-equations" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[\begin{split}   
@@ -1607,8 +1772,8 @@ f_3 &amp;=&amp; \frac{dv_x}{dt} = \frac{1}{M} \left(-2 p_x \lambda + f_x - K_d v
 f_4 &amp;=&amp; \frac{dv_y}{dt} = \frac{1}{M} \left(-M G - 2 p_y \lambda - K_d v_y \right)
 \end{eqnarray}
 \end{split}\]</div>
-</div>
-<div class="section" id="algebraic-equations">
+</section>
+<section id="algebraic-equations">
 <h3>Algebraic equations<a class="headerlink" href="#algebraic-equations" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -1617,8 +1782,8 @@ g_1 &amp;=&amp; p_x^2 + p_y^2 - L^2  \\
 g_2 &amp;=&amp; -\theta + \arctan\left(p_x,-p_y\right) 
 \end{eqnarray}
 \end{split}\]</div>
-</div>
-<div class="section" id="dae-equations-in-vector-form">
+</section>
+<section id="dae-equations-in-vector-form">
 <h3>DAE equations in vector form<a class="headerlink" href="#dae-equations-in-vector-form" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -1641,8 +1806,8 @@ g_2
 \right]
 \;\;\;\;\;\;
 \end{split}\]</div>
-</div>
-<div class="section" id="dynamic-and-algebraic-states-and-inputs">
+</section>
+<section id="dynamic-and-algebraic-states-and-inputs">
 <h3>Dynamic and algebraic states and inputs<a class="headerlink" href="#dynamic-and-algebraic-states-and-inputs" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -1676,8 +1841,8 @@ v_y
 f_x
 \end{array} \right]
 \end{split}\]</div>
-</div>
-<div class="section" id="outputs">
+</section>
+<section id="outputs">
 <h3>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[
@@ -1715,46 +1880,32 @@ f_x
 \end{array}
 \right]
 \end{split}\]</div>
-</div>
-</div>
-<div class="section" id="pydae-model-building">
+</section>
+</section>
+<section id="pydae-model-building">
 <h2>pydae model building<a class="headerlink" href="#pydae-model-building" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sympy</span> <span class="k">as</span> <span class="nn">sym</span>
-<span class="kn">import</span> <span class="nn">pydae.build</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="kn">import</span> <span class="nn">pydae.build_cffi</span> <span class="k">as</span> <span class="nn">db</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="section" id="definition-of-variables-and-constants">
+<section id="definition-of-variables-and-constants">
 <h3>Definition of variables and constants<a class="headerlink" href="#definition-of-variables-and-constants" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;L&#39;</span><span class="p">:</span><span class="mf">5.21</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">:</span><span class="mf">9.81</span><span class="p">,</span><span class="s1">&#39;M&#39;</span><span class="p">:</span><span class="mf">10.0</span><span class="p">,</span><span class="s1">&#39;K_d&#39;</span><span class="p">:</span><span class="mf">1e-3</span><span class="p">}</span>  <span class="c1"># parameters with default values</span>
-
-
-<span class="n">u_ini_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;theta&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)}</span>  <span class="c1"># input for the initialization problem</span>
-<span class="n">u_run_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f_x&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>                  <span class="c1"># input for the running problem, its value is updated </span>
-
-
-<span class="n">x_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;p_x&#39;</span><span class="p">,</span><span class="s1">&#39;p_y&#39;</span><span class="p">,</span><span class="s1">&#39;v_x&#39;</span><span class="p">,</span><span class="s1">&#39;v_y&#39;</span><span class="p">]</span>  <span class="c1"># dynamic states</span>
-<span class="n">y_ini_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lam&#39;</span><span class="p">,</span><span class="s1">&#39;f_x&#39;</span><span class="p">]</span>          <span class="c1"># algebraic states for the initialization problem</span>
-<span class="n">y_run_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lam&#39;</span><span class="p">,</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span>        <span class="c1"># algebraic for the running problem</span>
-
-<span class="n">sys_vars</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span><span class="n">params_dict</span><span class="p">,</span>
-            <span class="s1">&#39;u_list&#39;</span><span class="p">:</span><span class="n">u_run_dict</span><span class="p">,</span>
-            <span class="s1">&#39;x_list&#39;</span><span class="p">:</span><span class="n">x_list</span><span class="p">,</span>
-            <span class="s1">&#39;y_list&#39;</span><span class="p">:</span><span class="n">y_run_list</span><span class="p">}</span>
-
-<span class="n">exec</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">sym_gen_str</span><span class="p">())</span>  <span class="c1"># exec to generate the required symbolic varables and constants</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">K_d</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;L,G,M,K_d&#39;</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">p_x</span><span class="p">,</span><span class="n">p_y</span><span class="p">,</span><span class="n">v_x</span><span class="p">,</span><span class="n">v_y</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;p_x,p_y,v_x,v_y&#39;</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+<span class="n">lam</span><span class="p">,</span><span class="n">f_x</span><span class="p">,</span><span class="n">theta</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;lam,f_x,theta&#39;</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="system-formulation">
+</section>
+<section id="system-formulation">
 <h3>System formulation<a class="headerlink" href="#system-formulation" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1765,120 +1916,40 @@ f_x
 
 <span class="n">g_1</span> <span class="o">=</span> <span class="n">p_x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">p_y</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">L</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span><span class="n">lam</span><span class="o">*</span><span class="mf">1e-6</span>
 <span class="n">g_2</span> <span class="o">=</span> <span class="o">-</span><span class="n">theta</span> <span class="o">+</span> <span class="n">sym</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">p_x</span><span class="p">,</span><span class="o">-</span><span class="n">p_y</span><span class="p">)</span>
+
+<span class="n">params_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;L&#39;</span><span class="p">:</span><span class="mf">5.21</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">:</span><span class="mf">9.81</span><span class="p">,</span><span class="s1">&#39;M&#39;</span><span class="p">:</span><span class="mf">10.0</span><span class="p">,</span><span class="s1">&#39;K_d&#39;</span><span class="p">:</span><span class="mf">1e-3</span><span class="p">}</span>  <span class="c1"># parameters with default values</span>
+
+<span class="n">u_ini_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;theta&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)}</span>  <span class="c1"># input for the initialization problem</span>
+<span class="n">u_run_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f_x&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>                  <span class="c1"># input for the running problem, its value is updated </span>
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="build-the-model">
+</section>
+<section id="build-the-model">
 <h3>Build the model<a class="headerlink" href="#build-the-model" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;pendulum&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;params_dict&#39;</span><span class="p">:</span><span class="n">params_dict</span><span class="p">,</span>
-       <span class="s1">&#39;f_list&#39;</span><span class="p">:[</span><span class="n">dp_x</span><span class="p">,</span><span class="n">dp_y</span><span class="p">,</span><span class="n">dv_x</span><span class="p">,</span><span class="n">dv_y</span><span class="p">],</span>
-       <span class="s1">&#39;g_list&#39;</span><span class="p">:[</span><span class="n">g_1</span><span class="p">,</span><span class="n">g_2</span><span class="p">],</span>
-       <span class="s1">&#39;x_list&#39;</span><span class="p">:</span><span class="n">x_list</span><span class="p">,</span>
-       <span class="s1">&#39;y_ini_list&#39;</span><span class="p">:</span><span class="n">y_ini_list</span><span class="p">,</span>
-       <span class="s1">&#39;y_run_list&#39;</span><span class="p">:</span><span class="n">y_run_list</span><span class="p">,</span>
-       <span class="s1">&#39;u_run_dict&#39;</span><span class="p">:</span><span class="n">u_run_dict</span><span class="p">,</span>
-       <span class="s1">&#39;u_ini_dict&#39;</span><span class="p">:</span><span class="n">u_ini_dict</span><span class="p">,</span>
-       <span class="s1">&#39;h_dict&#39;</span><span class="p">:{</span><span class="s1">&#39;E_p&#39;</span><span class="p">:</span><span class="n">M</span><span class="o">*</span><span class="n">G</span><span class="o">*</span><span class="p">(</span><span class="n">p_y</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="s1">&#39;E_k&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="o">*</span><span class="n">M</span><span class="o">*</span><span class="p">(</span><span class="n">v_x</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">v_y</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span><span class="s1">&#39;f_x&#39;</span><span class="p">:</span><span class="n">f_x</span><span class="p">}}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;pendulum&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;params_dict&#39;</span><span class="p">:</span><span class="n">params_dict</span><span class="p">,</span>
+            <span class="s1">&#39;f_list&#39;</span><span class="p">:[</span><span class="n">dp_x</span><span class="p">,</span><span class="n">dp_y</span><span class="p">,</span><span class="n">dv_x</span><span class="p">,</span><span class="n">dv_y</span><span class="p">],</span>
+            <span class="s1">&#39;g_list&#39;</span><span class="p">:[</span><span class="n">g_1</span><span class="p">,</span><span class="n">g_2</span><span class="p">],</span>
+            <span class="s1">&#39;x_list&#39;</span><span class="p">:[</span> <span class="n">p_x</span><span class="p">,</span> <span class="n">p_y</span><span class="p">,</span> <span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">],</span>
+            <span class="s1">&#39;y_ini_list&#39;</span><span class="p">:[</span><span class="n">lam</span><span class="p">,</span><span class="n">f_x</span><span class="p">],</span>
+            <span class="s1">&#39;y_run_list&#39;</span><span class="p">:[</span><span class="n">lam</span><span class="p">,</span><span class="n">theta</span><span class="p">],</span>
+            <span class="s1">&#39;u_ini_dict&#39;</span><span class="p">:</span><span class="n">u_ini_dict</span><span class="p">,</span>
+            <span class="s1">&#39;u_run_dict&#39;</span><span class="p">:</span><span class="n">u_run_dict</span><span class="p">,</span>
+            <span class="s1">&#39;h_dict&#39;</span><span class="p">:{</span><span class="s1">&#39;E_p&#39;</span><span class="p">:</span><span class="n">M</span><span class="o">*</span><span class="n">G</span><span class="o">*</span><span class="p">(</span><span class="n">p_y</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="s1">&#39;E_k&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="o">*</span><span class="n">M</span><span class="o">*</span><span class="p">(</span><span class="n">v_x</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">v_y</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span><span class="s1">&#39;f_x&#39;</span><span class="p">:</span><span class="n">f_x</span><span class="p">}}</span>
 
-<span class="n">sys</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
-<span class="n">db</span><span class="o">.</span><span class="n">sys2num</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">bldr</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="n">sys_dict</span><span class="p">)</span>
+<span class="n">bldr</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">HTML</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 800 200&quot; width=&quot;400&quot; height=&quot;200&quot; version=&quot;1.1&quot;&gt;</span>
-
-<span class="s1">  &lt;g&gt;</span>
-<span class="s1">    &lt;!--control starts with radius 100 but shrinks to radius 0 when clicked.  It goes back to 100 when the reverseanimation runs--&gt;</span>
-<span class="s1">    &lt;circle cx=&quot;100&quot; cy=&quot;100&quot; r=&quot;100&quot; fill=&quot;#b2d4e5&quot;&gt;</span>
-<span class="s1">      &lt;animate id=&quot;startAnimation&quot; dur=&quot;1.0s&quot; attributeName=&quot;r&quot; values=&quot;100; 0&quot; fill=&quot;freeze&quot; begin=&quot;click&quot; /&gt;</span>
-<span class="s1">      &lt;animate dur=&quot;1.0s&quot; attributeName=&quot;r&quot; values=&quot;0; 100&quot; fill=&quot;freeze&quot; begin=&quot;reverseAnimation.begin&quot; /&gt;</span>
-<span class="s1">    &lt;/circle&gt;</span>
-<span class="s1">    &lt;text y=&quot;240&quot; x=&quot;50&quot; font-family=&quot;Verdana&quot; text-align=&quot;center&quot; font-size=&quot;30&quot; textLength=&quot;100&quot;&gt;Start&lt;/text&gt;</span>
-<span class="s1">  &lt;/g&gt;</span>
-
-<span class="s1">  &lt;g transform=&quot;translate(300,0)&quot;&gt;</span>
-<span class="s1">    &lt;circle cx=&quot;100&quot; cy=&quot;100&quot; r=&quot;100&quot; fill=&quot;#b2d4e5&quot;&gt;</span>
-<span class="s1">    &lt;/circle&gt;</span>
-
-<span class="s1">    &lt;!-- vertical line --&gt;</span>
-<span class="s1">    &lt;path d=&quot;M100 50 l0 100&quot; stroke=&quot;white&quot; stroke-width=&quot;20&quot; stroke-linecap=&quot;round&quot;&gt;</span>
-<span class="s1">      &lt;animate dur=&quot;0.5s&quot; begin=&quot;startAnimation.begin&quot; attributeName=&quot;d&quot; values=&quot;M100 50 l0 100; M100 100 l0 0; M100 150 l50 -100&quot; fill=&quot;freeze&quot; /&gt;</span>
-<span class="s1">      &lt;animate dur=&quot;0.5s&quot; begin=&quot;reverseAnimation.begin&quot; attributeName=&quot;d&quot; values=&quot;M100 150 l50 -100; M100 100 l0 0; M100 50 l0 100&quot; fill=&quot;freeze&quot; /&gt;</span>
-<span class="s1">    &lt;/path&gt;</span>
-
-<span class="s1">    &lt;!-- horizontal line --&gt;</span>
-<span class="s1">    &lt;path d=&quot;M50 100 l100 0&quot; stroke=&quot;white&quot; stroke-width=&quot;20&quot; stroke-linecap=&quot;round&quot;&gt;</span>
-<span class="s1">      &lt;animate dur=&quot;0.5s&quot; begin=&quot;startAnimation.begin&quot; attributeName=&quot;d&quot; values=&quot;M50 100 l100 0; M100 100 l0 0; M50 100 l50 50&quot; fill=&quot;freeze&quot; /&gt;</span>
-<span class="s1">      &lt;animate dur=&quot;0.5s&quot; begin=&quot;reverseAnimation.begin&quot; attributeName=&quot;d&quot; values=&quot; M50 100 l50 50; M100 100 l0 0; M50 100 l100 0&quot; fill=&quot;freeze&quot; /&gt;</span>
-<span class="s1">    &lt;/path&gt;</span>
-<span class="s1">  &lt;/g&gt;</span>
-
-<span class="s1">  &lt;g transform=&quot;translate(600,0)&quot;&gt;</span>
-<span class="s1">    &lt;!--control starts with radius 0 but grows to radius 100 when startanimation runs.  It goes back to 0 clicked--&gt;</span>
-<span class="s1">    &lt;circle cx=&quot;100&quot; cy=&quot;100&quot; r=&quot;0&quot; fill=&quot;#b2d4e5&quot;&gt;</span>
-<span class="s1">      &lt;animate dur=&quot;1s&quot; attributeName=&quot;r&quot; values=&quot;0; 100&quot; fill=&quot;freeze&quot; begin=&quot;startAnimation.begin&quot; /&gt;</span>
-<span class="s1">      &lt;animate id=&quot;reverseAnimation&quot; dur=&quot;1s&quot; attributeName=&quot;r&quot; values=&quot;100; 0&quot; fill=&quot;freeze&quot; begin=&quot;click&quot; /&gt;</span>
-<span class="s1">    &lt;/circle&gt;</span>
-<span class="s1">    &lt;text y=&quot;240&quot; x=&quot;25&quot; font-family=&quot;Verdana&quot; text-align=&quot;center&quot; font-size=&quot;30&quot; textLength=&quot;150&quot;&gt;Reverse&lt;/text&gt;</span>
-<span class="s1">  &lt;/g&gt;</span>
-<span class="s1">&lt;/svg&gt;</span>
-<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="400" height="200" version="1.1">
-
-  <g>
-    <!--control starts with radius 100 but shrinks to radius 0 when clicked.  It goes back to 100 when the reverseanimation runs-->
-    <circle cx="100" cy="100" r="100" fill="#b2d4e5">
-      <animate id="startAnimation" dur="1.0s" attributeName="r" values="100; 0" fill="freeze" begin="click" />
-      <animate dur="1.0s" attributeName="r" values="0; 100" fill="freeze" begin="reverseAnimation.begin" />
-    </circle>
-    <text y="240" x="50" font-family="Verdana" text-align="center" font-size="30" textLength="100">Start</text>
-  </g>
-
-  <g transform="translate(300,0)">
-    <circle cx="100" cy="100" r="100" fill="#b2d4e5">
-    </circle>
-
-    <!-- vertical line -->
-    <path d="M100 50 l0 100" stroke="white" stroke-width="20" stroke-linecap="round">
-      <animate dur="0.5s" begin="startAnimation.begin" attributeName="d" values="M100 50 l0 100; M100 100 l0 0; M100 150 l50 -100" fill="freeze" />
-      <animate dur="0.5s" begin="reverseAnimation.begin" attributeName="d" values="M100 150 l50 -100; M100 100 l0 0; M100 50 l0 100" fill="freeze" />
-    </path>
-
-    <!-- horizontal line -->
-    <path d="M50 100 l100 0" stroke="white" stroke-width="20" stroke-linecap="round">
-      <animate dur="0.5s" begin="startAnimation.begin" attributeName="d" values="M50 100 l100 0; M100 100 l0 0; M50 100 l50 50" fill="freeze" />
-      <animate dur="0.5s" begin="reverseAnimation.begin" attributeName="d" values=" M50 100 l50 50; M100 100 l0 0; M50 100 l100 0" fill="freeze" />
-    </path>
-  </g>
-
-  <g transform="translate(600,0)">
-    <!--control starts with radius 0 but grows to radius 100 when startanimation runs.  It goes back to 0 clicked-->
-    <circle cx="100" cy="100" r="0" fill="#b2d4e5">
-      <animate dur="1s" attributeName="r" values="0; 100" fill="freeze" begin="startAnimation.begin" />
-      <animate id="reverseAnimation" dur="1s" attributeName="r" values="100; 0" fill="freeze" begin="click" />
-    </circle>
-    <text y="240" x="25" font-family="Verdana" text-align="center" font-size="30" textLength="150">Reverse</text>
-  </g>
-</svg>
-</div></div>
-</div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1902,36 +1973,48 @@ f_x
 
               </div>
               
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../dae/dae.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Differential Algebraic Equations (DAE)</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="pendulum_sim.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Pendulum simulation</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
         </div>
     </div>
-    
-    
-    <div class='prev-next-bottom'>
-        
-    <a class='left-prev' id="prev-link" href="../dae/dae.html" title="previous page">Differential Algebraic Equations (DAE)</a>
-    <a class='right-next' id="next-link" href="pendulum_sim.html" title="next page">Pendulum simulation</a>
-
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Juan Manuel Mauricio<br/>
+  
+      &copy; Copyright 2020.<br/>
+</p>
+        </footer>
     </div>
-    <footer class="footer mt-5 mt-md-0">
-    <div class="container">
-      <p>
-        
-          By Juan Manuel Mauricio<br/>
-        
-            &copy; Copyright 2020.<br/>
-      </p>
-    </div>
-  </footer>
-</main>
+    
+</div>
 
 
       </div>
     </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 
-    
-  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
 
-
-    
   </body>
 </html>
