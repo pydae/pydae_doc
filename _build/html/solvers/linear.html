@@ -119,6 +119,11 @@ const thebe_selector_output = ".output, .cell_output"
    Differential Algebraic Equations (DAE)
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../dae/ss.html">
+   Steady state solution
+  </a>
+ </li>
 </ul>
 <p>
  <span class="caption-text">
@@ -401,11 +406,11 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>130 ms ± 8.42 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>131 ms ± 21.4 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-0.28163834,  0.08875548,  1.15262372, ..., -4.31285585,
-       -3.80980083, -6.41028037])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([  1.93647702,   3.7990657 ,   6.02947716, ...,  25.33360388,
+       -10.57067718,  19.62240542])
 </pre></div>
 </div>
 </div>
@@ -421,8 +426,8 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-0.28163834,  0.08875548,  1.15262372, ..., -4.31285585,
-       -3.80980083, -6.41028037])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([  1.93647702,   3.7990657 ,   6.02947716, ...,  25.33360388,
+       -10.57067718,  19.62240542])
 </pre></div>
 </div>
 </div>
@@ -482,7 +487,7 @@ title="Print to PDF"
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_25632</span>\<span class="mf">1716964377.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_32936</span>\<span class="mf">1716964377.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="n">error</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;int *&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">39</span> 
 <span class="ne">---&gt; </span><span class="mi">40</span> <span class="n">mkl_pardiso</span><span class="o">.</span><span class="n">pardiso</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">maxfct</span><span class="p">,</span> <span class="n">mnum</span><span class="p">,</span> <span class="n">mtype</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">pA</span><span class="p">,</span> <span class="n">pia</span><span class="p">,</span> <span class="n">pja</span><span class="p">,</span> <span class="n">perm</span><span class="p">,</span> <span class="n">nrhs</span><span class="p">,</span> <span class="n">iparm</span><span class="p">,</span> <span class="n">dparm</span><span class="p">,</span> <span class="n">pb</span><span class="p">,</span> <span class="n">px</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>

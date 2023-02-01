@@ -51,7 +51,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Pendulum DAE system" href="../pendulum/pendulum_doc.html" />
+    <link rel="next" title="Steady state solution" href="ss.html" />
     <link rel="prev" title="Overview" href="../intro.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -121,6 +121,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Differential Algebraic Equations (DAE)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ss.html">
+   Steady state solution
   </a>
  </li>
 </ul>
@@ -322,8 +327,8 @@ title="Print to PDF"
 \[\begin{split}
 \begin{split}   \nonumber
 \mathbf {\dot x}  &amp;   =  \mathbf{f (x,y,u) } \\
-\mathbf 0 &amp;   =  \mathbf{g (x,y,u) }  \\
-\mathbf z &amp;   =  \mathbf{h (x,y,u) } 
+\mathbf 0 &amp;   =  \mathbf{g (x,y,u,p) }  \\
+\mathbf z &amp;   =  \mathbf{h (x,y,u,p) } 
 \end{split}
 \end{split}\]</div>
 <p>with:</p>
@@ -331,6 +336,7 @@ title="Print to PDF"
 <li><p><span class="math notranslate nohighlight">\( \mathbf x\)</span>: dynamic states</p></li>
 <li><p><span class="math notranslate nohighlight">\( \mathbf y\)</span>: algebraic states</p></li>
 <li><p><span class="math notranslate nohighlight">\( \mathbf u\)</span>: known inputs</p></li>
+<li><p><span class="math notranslate nohighlight">\( \mathbf p\)</span>: parameters</p></li>
 <li><p><span class="math notranslate nohighlight">\( \mathbf f\)</span>: differential equations</p></li>
 <li><p><span class="math notranslate nohighlight">\( \mathbf g\)</span>: algebraic equations</p></li>
 <li><p><span class="math notranslate nohighlight">\( \mathbf z\)</span>: outputs</p></li>
@@ -352,6 +358,22 @@ x_2 \\
 \vdots \\ 
 y_{N_y}
 \end{array} \right]
+\end{split}\]</div>
+<p>Backward solution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{split} 
+\mathbf {\dot x}  &amp;  =  \mathbf {f (x,y^{ini},u^{ini},p) } \\
+\mathbf 0 &amp; =  \mathbf {g (x,y^{ini},u^{ini},p) }  
+\end{split}
+\end{split}\]</div>
+<p>Foreward solution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{split} 
+\mathbf {\dot x}  &amp;  =  \mathbf {f (x,y^{run},u^{run},p) } \\
+\mathbf 0 &amp; =  \mathbf {g (x,y^{run},u^{run},p) }  
+\end{split}
 \end{split}\]</div>
 </section>
 
@@ -389,10 +411,10 @@ y_{N_y}
             <p class="prev-next-title">Overview</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../pendulum/pendulum_doc.html" title="next page">
+    <a class='right-next' id="next-link" href="ss.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Pendulum DAE system</p>
+        <p class="prev-next-title">Steady state solution</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

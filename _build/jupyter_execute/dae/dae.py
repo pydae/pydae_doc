@@ -6,8 +6,8 @@
 # $$
 # \begin{split}   \nonumber
 # \mathbf {\dot x}  &   =  \mathbf{f (x,y,u) } \\
-# \mathbf 0 &   =  \mathbf{g (x,y,u) }  \\
-# \mathbf z &   =  \mathbf{h (x,y,u) } 
+# \mathbf 0 &   =  \mathbf{g (x,y,u,p) }  \\
+# \mathbf z &   =  \mathbf{h (x,y,u,p) } 
 # \end{split}
 # $$
 # 
@@ -15,7 +15,8 @@
 # 
 # - $ \mathbf x$: dynamic states
 # - $ \mathbf y$: algebraic states
-# - $ \mathbf u$: known inputs		
+# - $ \mathbf u$: known inputs	
+# - $ \mathbf p$: parameters		
 # - $ \mathbf f$: differential equations
 # - $ \mathbf g$: algebraic equations	
 # - $ \mathbf z$: outputs
@@ -40,4 +41,24 @@
 # $$
 # 
 # 
+# Backward solution:
+# 
+# $$
+# \begin{split} 
+# \mathbf {\dot x}  &  =  \mathbf {f (x,y^{ini},u^{ini},p) } \\
+# \mathbf 0 & =  \mathbf {g (x,y^{ini},u^{ini},p) }  
+# \end{split}
+# $$
+# 
+# Foreward solution:
+# 
+# $$
+# \begin{split} 
+# \mathbf {\dot x}  &  =  \mathbf {f (x,y^{run},u^{run},p) } \\
+# \mathbf 0 & =  \mathbf {g (x,y^{run},u^{run},p) }  
+# \end{split}
+# $$
+# 
+# 
+
 # 

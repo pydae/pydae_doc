@@ -5,6 +5,7 @@
 - part: DAE theory
   chapters:
   - file: dae/dae
+  - file: dae/ss
 - part: Pendulum example
   chapters:
   - file: pendulum/pendulum_doc
