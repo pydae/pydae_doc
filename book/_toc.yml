@@ -1,12 +1,12 @@
 # Table of content
 # Learn more at https://jupyterbook.org/customize/toc.html
-#
-- file: intro
-- part: DAE theory
-  chapters:
+
+format: jb-book
+root: intro
+chapters:
+  sections:
   - file: dae/dae
   - file: dae/ss
-- part: Pendulum example
-  chapters:
-  - file: pendulum/pendulum_doc
-  - file: pendulum/pendulum_sim
+chapters:
+- file: pendulum/pendulum_doc
+- file: pendulum/pendulum_sim

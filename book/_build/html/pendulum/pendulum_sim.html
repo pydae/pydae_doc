@@ -4,9 +4,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Pendulum simulation &#8212; DAE systems in python</title>
+    <title>Pendulum simulation &#8212; pydae</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -20,35 +20,38 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script >const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="Pendulum DAE system" href="pendulum_doc.html" />
@@ -92,10 +95,10 @@ const thebe_selector_output = ".output, .cell_output"
         
       
       
-      <img src="../_static/logo.svg" class="logo" alt="logo">
+      <img src="../_static/logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">DAE systems in python</h1>
+      <h1 class="site-logo" id="site-title">pydae</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -111,29 +114,7 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <p>
- <span class="caption-text">
-  DAE theory
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../dae/dae.html">
-   Differential Algebraic Equations (DAE)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../dae/ss.html">
-   Steady state solution
-  </a>
- </li>
-</ul>
-<p>
- <span class="caption-text">
-  Pendulum example
- </span>
-</p>
-<ul class="current nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="pendulum_doc.html">
    Pendulum DAE system
@@ -203,7 +184,7 @@ title="Toggle navigation"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/main?urlpath=tree/docs/pendulum/pendulum_sim.ipynb"
+        <a href="https://mybinder.org/v2/gh/pydae/pydae_doc/main?urlpath=tree/book/pendulum/pendulum_sim.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -237,10 +218,19 @@ title="Fullscreen mode"
   </span>
 
 </button>
-<a href="https://github.com/executablebooks/jupyter-book"
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pydae/pydae_doc"
    class="headerbtn"
    data-toggle="tooltip"
-data-placement="bottom"
+data-placement="left"
 title="Source repository"
 >
   
@@ -248,8 +238,31 @@ title="Source repository"
 <span class="headerbtn__icon-container">
   <i class="fab fa-github"></i>
   </span>
-
+<span class="headerbtn__text-container">repository</span>
 </a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pydae/pydae_doc/issues/new?title=Issue%20on%20page%20%2Fpendulum/pendulum_sim.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
 
 <div class="menu-dropdown menu-dropdown-download-buttons">
   <button class="headerbtn menu-dropdown__trigger"
@@ -436,7 +449,7 @@ title="Print to PDF"
               <div>
                 
   <section id="pendulum-simulation">
-<h1>Pendulum simulation<a class="headerlink" href="#pendulum-simulation" title="Permalink to this headline">¶</a></h1>
+<h1>Pendulum simulation<a class="headerlink" href="#pendulum-simulation" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -449,7 +462,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.pyplot._IonContext at 0x1d56be40460&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.pyplot._IonContext at 0x1d7a3286fd0&gt;
 </pre></div>
 </div>
 </div>
@@ -491,7 +504,7 @@ title="Print to PDF"
 </div>
 </div>
 <section id="initialization">
-<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h2>
+<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">initialize</span></code> method gives the steady state of the system by solving first the backward and then the forward problems.
 In this case</p>
 <div class="cell docutils container">
@@ -565,7 +578,7 @@ T = 2\pi \sqrt{\frac{L}{G}}
 </div>
 </section>
 <section id="small-signal-analisys">
-<h2>Small signal analisys<a class="headerlink" href="#small-signal-analisys" title="Permalink to this headline">¶</a></h2>
+<h2>Small signal analisys<a class="headerlink" href="#small-signal-analisys" title="Permalink to this headline">#</a></h2>
 <p>After the system is initialized we can perform a small signal analysis. The <code class="docutils literal notranslate"><span class="pre">pydae.ssa</span></code> module has a method called <code class="docutils literal notranslate"><span class="pre">eval_A</span></code> to compute the matrix <span class="math notranslate nohighlight">\(A\)</span> for the system:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -654,7 +667,7 @@ T = 2\pi \sqrt{\frac{L}{G}}
 </div>
 </section>
 <section id="simulation">
-<h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
+<h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">#</a></h2>
 <p>A time simulation can be performed using the method <code class="docutils literal notranslate"><span class="pre">simulate</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -702,7 +715,7 @@ T = 2\pi \sqrt{\frac{L}{G}}
 <img alt="../_images/pendulum_sim_21_1.svg" src="../_images/pendulum_sim_21_1.svg" /></div>
 </div>
 <section id="animation-of-the-results">
-<h3>Animation of the results<a class="headerlink" href="#animation-of-the-results" title="Permalink to this headline">¶</a></h3>
+<h3>Animation of the results<a class="headerlink" href="#animation-of-the-results" title="Permalink to this headline">#</a></h3>
 <p>The obtained results can be animated.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
@@ -1104,9 +1117,9 @@ Oscillation period from small signal analysis with M = 105 kg: T = 4.58 s
 </section>
 </section>
 <section id="control">
-<h2>Control<a class="headerlink" href="#control" title="Permalink to this headline">¶</a></h2>
+<h2>Control<a class="headerlink" href="#control" title="Permalink to this headline">#</a></h2>
 <section id="simulation-for-control-testing">
-<h3>Simulation for control testing<a class="headerlink" href="#simulation-for-control-testing" title="Permalink to this headline">¶</a></h3>
+<h3>Simulation for control testing<a class="headerlink" href="#simulation-for-control-testing" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Δt</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -1154,7 +1167,7 @@ Oscillation period from small signal analysis with M = 105 kg: T = 4.58 s
 </div>
 </section>
 <section id="basic-porportional-regulator">
-<h3>Basic porportional regulator<a class="headerlink" href="#basic-porportional-regulator" title="Permalink to this headline">¶</a></h3>
+<h3>Basic porportional regulator<a class="headerlink" href="#basic-porportional-regulator" title="Permalink to this headline">#</a></h3>
 <p>Now we are going to propose a control law as follows:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1337,7 +1350,7 @@ f_x = f_h + \Delta f_x
 </div>
 </section>
 <section id="on-off-control">
-<h3>On-off control<a class="headerlink" href="#on-off-control" title="Permalink to this headline">¶</a></h3>
+<h3>On-off control<a class="headerlink" href="#on-off-control" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Δt</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -1554,7 +1567,7 @@ f_x = f_h + \Delta f_x
   
     By Juan Manuel Mauricio<br/>
   
-      &copy; Copyright 2020.<br/>
+      &copy; Copyright 2022.<br/>
 </p>
         </footer>
     </div>
